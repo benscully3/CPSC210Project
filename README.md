@@ -35,3 +35,9 @@ have learned in my studies.
 
 ## User stories:
 - As a user, I want to be able to add solar systems to my galaxy.
+- As a user, I want to be able to choose the number of central bodies
+in a solar system.
+- As a user, I want to be able to choose the type of central body in 
+a solar system.
+- As a user, I want the program to offer astronomy facts about what I
+am adding to the galaxy.
