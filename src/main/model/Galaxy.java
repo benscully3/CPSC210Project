@@ -6,7 +6,7 @@ import java.util.HashMap;
 public class Galaxy {
     private HashMap<String,SolarSystem> solarSystems;
 
-    public void Galaxy(){
+    public Galaxy(){
         // stub
     }
 
@@ -18,7 +18,9 @@ public class Galaxy {
 
     public SolarSystem getSolarSystem(String solarSystemName){
         //  stub
-        SolarSystem solarSystem = new SolarSystem();
+        CentralBody centralBody = new BlackHole(5);
+        ArrayList<Planet> planets = new ArrayList<>();
+        SolarSystem solarSystem = new SolarSystem(centralBody,planets);
         return solarSystem;
     }
 

@@ -9,7 +9,7 @@ public class SolarSystem {
 
     // MODIFIES: this
     // EFFECTS: construct a solar system with a given central body and planets
-    public void SolarSystem(CentralBody centralBody, ArrayList<Planet> planetList){
+    public SolarSystem(CentralBody centralBody, ArrayList<Planet> planetList){
         //stub
     }
 
@@ -29,7 +29,7 @@ public class SolarSystem {
     // REQUIRES: planet must be in solar system
     // EFFECTS: get planet based on its key (name)
     public Planet getPlanet(String planetName){
-        Planet planet = new GasGiant();
+        Planet planet = new GasGiant(30);
         return planet;
     }
 

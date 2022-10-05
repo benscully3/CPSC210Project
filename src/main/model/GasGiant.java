@@ -5,7 +5,7 @@ public class GasGiant extends Planet{
 
     // REQUIRES: 10 < radius < 40
     // EFFECT: construct a gas giant planet based on radius
-    public void RockyPlanet(int radius){
+    public GasGiant(double radius){
         // stub
     }
 }

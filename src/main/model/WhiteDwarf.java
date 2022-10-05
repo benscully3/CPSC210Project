@@ -1,10 +1,10 @@
 package model;
 
 // class represent a white dwarf star
-public class WhiteDwarf {
+public class WhiteDwarf extends CentralBody {
 
     // EFFECT: construct a white dwarf based off of mass
-    public void WhiteDwarf(int mass){
+    public WhiteDwarf(double mass){
         // stub
     }
 
