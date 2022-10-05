@@ -1,4 +1,8 @@
 package model;
 
-public interface Body {
+public abstract class Body {
+    protected int mass;
+    protected int radius;
+
+
 }
