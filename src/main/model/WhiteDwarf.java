@@ -1,7 +1,7 @@
 package model;
 
 // class represent a white dwarf star
-public class WhiteDwarf extends CentralBody {
+public class WhiteDwarf extends Star {
 
     // EFFECT: construct a white dwarf based off of mass
     public WhiteDwarf(double mass){

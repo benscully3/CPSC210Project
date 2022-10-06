@@ -1,9 +1,13 @@
 package model;
 
 // abstract class to represent a planet with orbit size and moon
-public abstract class Planet extends Body{
-    protected int orbitSize;
-    protected boolean moon; // does the planet have one moon
+public class Planet extends Body{
+    private double orbitSize;
+    private boolean moon; // does the planet have one moon
+    private boolean rocky; // if false: gas giant
+
+
+    public Planet(double radius){}
 
     // REQUIRES:
     // MODIFIES: this
@@ -11,6 +15,18 @@ public abstract class Planet extends Body{
     //         with the combined masses
     public void collide(){
         // stub
+    }
+
+    public double getOrbitSize(){
+        return orbitSize;
+    }
+
+    public boolean isMoon(){
+        return moon;
+    }
+
+    public boolean isRocky(){
+        return rocky;
     }
 
 }

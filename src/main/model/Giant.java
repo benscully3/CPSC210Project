@@ -1,6 +1,8 @@
 package model;
 
-public abstract class Giant extends Star{
+public class Giant extends Star{
+
+    public Giant(double luminosity){}
 
     public void supernova(){
         // stub

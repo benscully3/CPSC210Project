@@ -10,17 +10,6 @@ public class Binary extends CentralBody{
         // stub
     }
 
-    // MODIFIES: this
-    // EFFECT: The two central bodies collapse into one, adding their mass
-    //              if two white dwarfs -> supernova (destroys solar system)
-    //              else if one white dwarf one 'normal star' -> supernova
-    //              else if two main sequence or giants -> one giant
-    //              else if one black hole -> one black hole
-    //              else if one neutron star -> one neutron star
-    public void coalesce(){
-        // stub
-    }
-
     public CentralBody getCentralBody1(){
         return centralBody1;
     }

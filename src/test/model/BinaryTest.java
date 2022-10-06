@@ -20,7 +20,6 @@ public class BinaryTest {
         neutronStar = new NeutronStar(1.7);
         whiteDwarf1 = new WhiteDwarf(0.7);
         whiteDwarf2 = new WhiteDwarf(1);
-        mainSequence = new MainSequenceStar(1);
 
     }
 
@@ -29,7 +28,6 @@ public class BinaryTest {
         testBinary = new Binary(blackHole, neutronStar);
         assertEquals(blackHole, testBinary.getCentralBody1());
         assertEquals(neutronStar, testBinary.getCentralBody2());
-
     }
 
     // Test coalesce with black hole involved

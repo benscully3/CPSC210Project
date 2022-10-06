@@ -29,7 +29,7 @@ public class SolarSystem {
     // REQUIRES: planet must be in solar system
     // EFFECTS: get planet based on its key (name)
     public Planet getPlanet(String planetName){
-        Planet planet = new GasGiant(30);
+        Planet planet = new Planet(30);
         return planet;
     }
 

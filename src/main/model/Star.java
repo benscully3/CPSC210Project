@@ -1,23 +1,15 @@
 package model;
 
 public abstract class Star extends CentralBody {
-    protected int mass;
-    protected int radius;
-    protected int luminosity;
-    protected int temperature;
+    protected double luminosity;
+    protected double temperature;
 
-    public int getMass(){
 
-        return this.mass;
-    }
-    public int getRadius(){
-        return this.radius;
-    }
-    public int getLuminosity(){
+    public double getLuminosity(){
 
         return this.luminosity;
     }
-    public int getTemperature(){
+    public double getTemperature(){
 
         return this.temperature;
     }
