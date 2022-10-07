@@ -7,7 +7,10 @@ public class Binary extends CentralBody{
     // REQUIRES: Central body parameters cannot be binaries
     // EFFECT:
     public Binary(CentralBody centralBody1, CentralBody centralBody2){
-        // stub
+        this.centralBody1 = centralBody1;
+        this.centralBody2 = centralBody2;
+        this.mass = centralBody1.getMass() + centralBody2.getMass();
+        this.radius = centralBody1.getRadius() + centralBody2.getRadius();
     }
 
     public CentralBody getCentralBody1(){

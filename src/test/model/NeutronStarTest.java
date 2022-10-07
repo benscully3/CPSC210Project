@@ -3,12 +3,27 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class NeutronStarTest {
+    private NeutronStar neutronStar;
+    private double radius;
 
     @BeforeEach
-    public void runBefore(){}
+    public void runBefore(){
+        neutronStar = new NeutronStar("neutron star",1.8);
+    }
 
     @Test
-    public void neutronStarTest(){}
+    public void neutronStarTest(){
+        radius = 4.6e-6 * Math.pow(1.8, -1/3);
+        assertEquals(1.8, neutronStar.getMass());
+        assertEquals(radius, neutronStar.getRadius());
+    }
+
+    @Test
+    public void canSupernovaTest(){
+        assertFalse(neutronStar.canSupernova());
+    }
 
 }
