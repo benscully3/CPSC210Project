@@ -149,12 +149,22 @@ public class GalaxyBuilderApp {
         WhiteDwarf whiteDwarf;
         String name;
         double mass = 0;
+        boolean keepGoing = true;
 
         print("\nName your star!:");
         name = input.next();
         print("\nChoose a number for your star's mass! " +
                 "(entering 2 means twice the mass of the sun)");
-        mass = inputNumber();
+        print("\nWhite Dwarfs must have a mass under 1.4 solar masses");
+
+        while (keepGoing) {
+            mass = inputNumber();
+            if (mass > 1.4){
+                print("Please enter a number under 1.4 :)");
+            } else{
+                keepGoing = false;
+            }
+        }
         whiteDwarf = new WhiteDwarf(name, mass);
         return whiteDwarf;
     }
@@ -163,12 +173,22 @@ public class GalaxyBuilderApp {
         NeutronStar neutronStar;
         String name;
         double mass = 0;
+        boolean keepGoing = true;
 
         print("\nName your star!:");
         name = input.next();
         print("\nChoose a number for your star's mass! " +
                 "(entering 2 means twice the mass of the sun)");
-        mass = inputNumber();
+        print("\n Neutron star mass must be between 1.4 and 2.5 solar masses");
+
+        while (keepGoing) {
+            mass = inputNumber();
+            if ((mass < 1.4) || (mass > 2.5)){
+                print("Please enter a number between 1.4 and 2.5 :)");
+            } else{
+                keepGoing = false;
+            }
+        }
         neutronStar = new NeutronStar(name, mass);
         return neutronStar;
     }
@@ -177,12 +197,23 @@ public class GalaxyBuilderApp {
         BlackHole blackHole;
         String name;
         double mass = 0;
+        boolean keepGoing = true;
 
         print("\nName your black hole!:");
         name = input.next();
         print("\nChoose a number for your black hole's mass! " +
                 "(entering 2 means twice the mass of the sun)");
-        mass = inputNumber();
+        print("\nBlack Hole mass must be at least 2.5 solar masses!");
+
+        while (keepGoing) {
+            mass = inputNumber();
+            if (mass < 2.5){
+                print("Please enter a number over 2.5 :)");
+            } else{
+                keepGoing = false;
+            }
+        }
+
         blackHole = new BlackHole(name, mass);
         return blackHole;
     }
