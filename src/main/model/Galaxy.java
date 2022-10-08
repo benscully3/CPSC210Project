@@ -8,7 +8,6 @@ public class Galaxy {
     private String name;
     private HashMap<String, SolarSystem> solarSystems;
     private int solarSystemCount;
-    private String solarSystemName;
 
     // EFFECT: construct a galaxy with no solar systems
     public Galaxy(String name) {
@@ -20,7 +19,8 @@ public class Galaxy {
     // MODIFIES: this
     // EFFECT: adds a solar system to the galaxy
     public void addSolarSystem(SolarSystem solarSystem) throws NameAlreadyUsed {
-        solarSystemName = solarSystem.getName();
+        String solarSystemName = solarSystem.getName();
+        
         if (solarSystems.get(solarSystemName) == null) {
             solarSystems.put(solarSystemName, solarSystem);
             solarSystemCount = solarSystemCount + 1;

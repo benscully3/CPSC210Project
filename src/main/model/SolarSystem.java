@@ -52,11 +52,7 @@ public class SolarSystem extends Body {
         double orbit1 = planet1.getOrbitSize();
         double orbit2 = planet2.getOrbitSize();
 
-        if (orbit1 == orbit2) {
-            return true;
-        } else {
-            return false;
-        }
+        return orbit1 == orbit2;
 
     }
 

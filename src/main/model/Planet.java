@@ -5,12 +5,13 @@ public class Planet extends Body {
     private double orbitSize;
     private boolean moon; // does the planet have one moon
     private boolean rocky; // if false: gas giant
-    private double rhoGas = 0.04; // gas planet density
-    private double rhoRocky = 0.18; // rocky planet density
+    private final double RHO_GAS = 0.04; // gas planet density
+    private final double RHO_ROCKY = 0.18; // rocky planet density
 
 
     // EFFECT: create a default rocky planet with no moon
     //         with 1 earth radius and one earth orbit
+    //         this constructor is mainly for test classes
     public Planet(String name) {
         this.radius = 1;
         this.moon = false;
@@ -36,15 +37,6 @@ public class Planet extends Body {
 
     }
 
-    // REQUIRES:
-    // MODIFIES: this
-    // EFFECT: collides this planet with another making one planet
-    //         with the combined masses
-    //         new planet has a moon
-    public void collide() {
-        // stub
-    }
-
     public double getOrbitSize() {
         return orbitSize;
     }
@@ -59,12 +51,11 @@ public class Planet extends Body {
 
     private double calculateMass(boolean isRocky, double radius) {
         double mass;
-        double base;
 
         if (isRocky) {
-            mass = 4 * 3.14 * rhoRocky * Math.pow(radius, 3);
+            mass = 1.33 * 3.14 * RHO_ROCKY * Math.pow(radius, 3);
         } else {
-            mass = 4 * 3.14 * rhoGas * Math.pow(radius, 3);
+            mass = 1.33 * 3.14 * RHO_GAS * Math.pow(radius, 3);
         }
         return mass;
     }

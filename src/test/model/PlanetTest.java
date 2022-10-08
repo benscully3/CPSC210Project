@@ -9,8 +9,8 @@ public class PlanetTest {
     private Planet gasPlanet;
     private Planet rockyPlanet;
     private Planet planetWithMoon;
-    private double rhoGas = 0.04; // gas planet density
-    private double rhoRocky = 0.18; // rocky planet density
+    private final double RHO_GAS = 0.04; // gas planet density
+    private final double RHO_ROCKY = 0.18; // rocky planet density
 
     @BeforeEach
     public void runBefore() {
@@ -46,12 +46,11 @@ public class PlanetTest {
 
     private double calculateMass(boolean isRocky, double radius) {
         double mass;
-        double base;
 
         if (isRocky) {
-            mass = 4 * 3.14 * rhoRocky * Math.pow(radius, 3);
+            mass = 1.33 * 3.14 * RHO_ROCKY * Math.pow(radius, 3);
         } else {
-            mass = 4 * 3.14 * rhoGas * Math.pow(radius, 3);
+            mass = 1.33 * 3.14 * RHO_GAS * Math.pow(radius, 3);
         }
         return mass;
     }

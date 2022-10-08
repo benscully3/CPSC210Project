@@ -15,10 +15,6 @@ public class WhiteDwarf extends Star {
     // MODIFIES: this
     // EFFECT: star explodes destroying solar system
     public boolean canSupernova() {
-        if (this.mass >= 1.4) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.mass > 1.4;
     }
 }

@@ -16,13 +16,15 @@ public class GalaxyBuilderApp {
     private Galaxy galaxy;
     private Scanner input;
 
+
     public GalaxyBuilderApp() {
         runGalaxyBuilder();
     }
 
+
     private void runGalaxyBuilder() {
         boolean keepGoing = true;
-        String command = null;
+        String command;
 
         init();
 
@@ -37,12 +39,12 @@ public class GalaxyBuilderApp {
                 processMainCommand(command);
             }
         }
-
         System.out.println("\nGoodbye! Thanks for playing!");
     }
 
+
     private void init() {
-        String command = null;
+        String command;
 
         input = new Scanner(System.in);
         input.useDelimiter("\n");
@@ -50,28 +52,31 @@ public class GalaxyBuilderApp {
         command = input.next();
         command = command.toLowerCase();
         galaxy = new Galaxy(command);
-
     }
+
 
     private void displayMainMenu() {
-        if (galaxy.getSolarSystemCount() == 0) {
-            print("\nSelect from:");
-            print("\tn -> Add a new solar system!");
-            print("\tq -> Quit");
-
-        } else {
-            print("\nSelect from:");
-            print("\tn -> Add a new solar system!");
+        print("\n GALAXY: " + galaxy.getName());
+        print(" ------");
+        print("Select from:");
+        print("\tn -> Add a new solar system!");
+        if (galaxy.getSolarSystemCount() != 0) {
             print("\te -> Edit your solar systems!");
             print("\td -> Display your solar systems!");
-            print("\tq -> Quit");
         }
+        print("\tc -> Change galaxy name");
+        print("\tq -> Quit");
     }
+
 
     private void processMainCommand(String command) {
         if (galaxy.getSolarSystemCount() == 0) {
             if (command.equals("n")) {
                 newSolarSystem();
+            } else if (command.equals("c")) {
+                print("\n Enter new galaxy name:");
+                String newName = input.next();
+                galaxy.changeName(newName);
             } else {
                 System.out.println("Selection not valid :(, try again");
             }
@@ -85,15 +90,15 @@ public class GalaxyBuilderApp {
             } else {
                 System.out.println("Selection not valid :(, try again");
             }
-
         }
     }
+
 
     private void displaySolarSystems() {
         String name = galaxy.getName();
         HashMap<String, SolarSystem> solarSystems = galaxy.getSolarSystems();
         boolean keepGoing = true;
-        String command = null;
+        String command;
 
         print("\nYOUR GALAXY: " + name);
         print(" SOLAR SYSTEMS");
@@ -109,6 +114,7 @@ public class GalaxyBuilderApp {
         }
     }
 
+
     private void displaySolarSystemInfo(SolarSystem solarSystem) {
         String name = solarSystem.getName();
         String centralBodyType = solarSystem.getCentralBody().getCentralBodyType();
@@ -117,15 +123,14 @@ public class GalaxyBuilderApp {
         print("\nName: " + name);
         print("\tCentral body: " + centralBodyType);
         print("\tNumber of planets: " + planetCount);
-
     }
 
+
     private void newSolarSystem() {
-        String name = null;
+        String name;
         CentralBody centralBody;
         SolarSystem solarSystem;
         boolean keepGoing = true;
-
 
         displayCentralBodies(false);
         centralBody = processCentralBodyCommand(false);
@@ -145,47 +150,35 @@ public class GalaxyBuilderApp {
         }
     }
 
+
     private CentralBody processCentralBodyCommand(boolean binary) {
         boolean keepGoing = true;
         String command;
 
-        if (binary) {
-            while (keepGoing) {
-                command = input.next();
-                command = command.toLowerCase();
-                if (command.equals("bh")) {
-                    return makeBlackHole();
-                } else if (command.equals("ns")) {
-                    return makeNeutronStar();
-                } else if (command.equals("wd")) {
-                    return makeWhiteDwarf();
-                } else if (command.equals("gs")) {
-                    return makeGiantStar();
+        while (keepGoing) {
+            command = input.next();
+            command = command.toLowerCase();
+            if (command.equals("bh")) {
+                return makeBlackHole();
+            } else if (command.equals("ns")) {
+                return makeNeutronStar();
+            } else if (command.equals("wd")) {
+                return makeWhiteDwarf();
+            } else if (command.equals("gs")) {
+                return makeGiantStar();
+            } else if (command.equals("by")) {
+                if (binary){
+                    print("Selection not valid :(, try again");
                 } else {
-                    System.out.println("Selection not valid :(, try again");
-                }
-            }
-        } else {
-            while (keepGoing) {
-                command = input.next();
-                command = command.toLowerCase();
-                if (command.equals("bh")) {
-                    return makeBlackHole();
-                } else if (command.equals("ns")) {
-                    return makeNeutronStar();
-                } else if (command.equals("wd")) {
-                    return makeWhiteDwarf();
-                } else if (command.equals("gs")) {
-                    return makeGiantStar();
-                } else if (command.equals("by")) {
                     return makeBinary();
-                } else {
-                    System.out.println("Selection not valid :(, try again");
                 }
+            } else {
+                print("Selection not valid :(, try again");
             }
         }
         return null;
     }
+
 
     private CentralBody makeGiantStar() {
         GiantStar giantStar;
@@ -201,6 +194,7 @@ public class GalaxyBuilderApp {
         giantStar = new GiantStar(name, luminosity);
         return giantStar;
     }
+
 
     private CentralBody makeWhiteDwarf() {
         WhiteDwarf whiteDwarf;
@@ -227,6 +221,7 @@ public class GalaxyBuilderApp {
         return whiteDwarf;
     }
 
+
     private CentralBody makeNeutronStar() {
         NeutronStar neutronStar;
         String name;
@@ -252,6 +247,7 @@ public class GalaxyBuilderApp {
         return neutronStar;
     }
 
+
     private CentralBody makeBlackHole() {
         BlackHole blackHole;
         String name;
@@ -273,10 +269,10 @@ public class GalaxyBuilderApp {
                 keepGoing = false;
             }
         }
-
         blackHole = new BlackHole(name, mass);
         return blackHole;
     }
+
 
     private CentralBody makeBinary() {
         Binary binary;
@@ -299,6 +295,7 @@ public class GalaxyBuilderApp {
         return binary;
     }
 
+
     private void editSolarSystems() {
         String command = null;
         boolean keepGoing = true;
@@ -306,7 +303,7 @@ public class GalaxyBuilderApp {
         HashMap<String, SolarSystem> solarSystems = galaxy.getSolarSystems();
         print("\nChoose which solar system to edit");
         for (String solarSystemName : solarSystems.keySet()) {
-            displaySolarSystem(solarSystemName);
+            print("\t" + solarSystemName);
         }
         print("\tback = Back to main page");
         while (keepGoing) {
@@ -323,8 +320,8 @@ public class GalaxyBuilderApp {
                 }
             }
         }
-
     }
+
 
     private void processSolarSystemCommand(String command, Set<String> solarSystemNames) throws BadCommand {
         for (String solarSystemName : solarSystemNames) {
@@ -336,12 +333,14 @@ public class GalaxyBuilderApp {
         throw new BadCommand();
     }
 
+
     private void editSolarSystem(String solarSystemName) {
         SolarSystem solarSystem = galaxy.getSolarSystem(solarSystemName);
         HashMap<String, Planet> planets = solarSystem.getPlanets();
         displayEditSolarSystem(planets, solarSystem.getPlanetCount(), solarSystem);
 
     }
+
 
     private void displayEditSolarSystem(HashMap<String, Planet> planets, int planetCount, SolarSystem solarSystem) {
         String command = null;
@@ -369,6 +368,7 @@ public class GalaxyBuilderApp {
         }
     }
 
+
     private void displaySolarSystemOptions(SolarSystem solarSystem) {
         print("\nChoose what to do:");
         print("\ta -> Add a new planet");
@@ -379,6 +379,7 @@ public class GalaxyBuilderApp {
         }
         print("\tback -> Back to main page");
     }
+
 
     private void processEditSolarSystemCommand(String command, HashMap<String, Planet> planets,
                                                String solarSystemName) throws BadCommand {
@@ -403,6 +404,7 @@ public class GalaxyBuilderApp {
         }
     }
 
+
     private boolean checkCertain() {
         String command;
         boolean keepGoing = true;
@@ -421,6 +423,7 @@ public class GalaxyBuilderApp {
         }
         return false;
     }
+
 
     private void supernova(SolarSystem solarSystem) {
         CentralBody centralBody;
@@ -445,6 +448,7 @@ public class GalaxyBuilderApp {
         drawSupernova();
     }
 
+
     private void drawSupernova() {
         print("-   * \\ . **   / *  -");
         print("   .  *\\**||*./*  *");
@@ -452,6 +456,7 @@ public class GalaxyBuilderApp {
         print("  *   */**||**\\*  *");
         print("- .*  /   -*   \\ .  -");
     }
+
 
     private void displaySolarSystemData(String solarSystemName, HashMap<String, Planet> planets) {
         CentralBody centralBody;
@@ -475,6 +480,7 @@ public class GalaxyBuilderApp {
         }
     }
 
+
     private void displayCentralBody(CentralBody centralBody) {
         String name = centralBody.getName();
         String mass = String.format("%.2f", centralBody.getMass());
@@ -496,25 +502,21 @@ public class GalaxyBuilderApp {
         }
     }
 
+
     private void displayPlanet(Planet p) {
-        String name;
-        String radius;
-        String mass;
-        String orbit;
         String moon = "No moon";
         String planetType = "Gas giant planet";
 
-        name = p.getName();
-        radius = String.format("%.2f", p.getRadius());
-        orbit = String.format("%.2f", p.getOrbitSize());
-        mass = String.format("%.2f", p.getMass());
+        String name = p.getName();
+        String radius = String.format("%.2f", p.getRadius());
+        String orbit = String.format("%.2f", p.getOrbitSize());
+        String mass = String.format("%.2f", p.getMass());
         if (p.isMoon()) {
             moon = "Has a moon";
         }
         if (p.isRocky()) {
             planetType = "Rocky planet";
         }
-        ;
 
         print("\nName:" + name + " - " + planetType + " - " + moon);
         print("\t-Mass: " + mass + " Earth masses");
@@ -522,18 +524,13 @@ public class GalaxyBuilderApp {
         print("\t-Orbit Size: " + orbit + " Earth orbits");
     }
 
+
     private void removePlanet(HashMap<String, Planet> planets, SolarSystem solarSystem) {
         boolean keepGoing = true;
         String command = null;
         Planet planet = null;
 
-        Set<String> planetNames = planets.keySet();
-        print("\nChoose a planet to remove - !This cannot be undone!");
-        for (String planetName : planetNames) {
-            displayPlanetName(planetName);
-        }
-        print("\tback -> Back to main page");
-
+        displayRemovePlanet(planets);
         while (keepGoing) {
             command = input.next();
             command = command.toLowerCase();
@@ -550,9 +547,19 @@ public class GalaxyBuilderApp {
             }
         }
         solarSystem.removePlanet(planet.getName());
-        // planets.remove(planet.getName());
         print("Success! " + planet.getName() + " was removed.");
     }
+
+
+    private void displayRemovePlanet(HashMap<String, Planet> planets) {
+        Set<String> planetNames = planets.keySet();
+        print("\nChoose a planet to remove - !This cannot be undone!");
+        for (String planetName : planetNames) {
+            print("\t" + planetName);
+        }
+        print("\tback -> Back to main page");
+    }
+
 
     private Planet processPlanetCommand(String command, HashMap<String, Planet> planets) throws BadCommand {
         Set<String> planetNames = planets.keySet();
@@ -564,9 +571,6 @@ public class GalaxyBuilderApp {
         throw new BadCommand();
     }
 
-    private void displayPlanetName(String planetName) {
-        print("\t" + planetName);
-    }
 
     private void addPlanet(String solarSystemName) {
         String planetName = "";
@@ -593,6 +597,7 @@ public class GalaxyBuilderApp {
         madePlanet(collide, radius);
     }
 
+
     private void madePlanet(boolean collide, double radius) {
         if (collide) {
             print("\nOh! The planet you added had the same orbit as a pre-existing one!");
@@ -605,6 +610,7 @@ public class GalaxyBuilderApp {
             print("\nBased on the size you entered, a new rocky planet has been added!");
         }
     }
+
 
     private String namePlanet(SolarSystem solarSystem) {
         boolean keepGoing = true;
@@ -622,6 +628,7 @@ public class GalaxyBuilderApp {
         }
         return planetName;
     }
+
 
     private boolean processMoonCommand() {
         boolean keepGoing = true;
@@ -641,6 +648,7 @@ public class GalaxyBuilderApp {
         return false;
     }
 
+
     private void checkName(String planetName, HashMap<String, Planet> planets) throws NameAlreadyUsed {
         Set<String> planetNames = planets.keySet();
         for (String pName : planetNames) {
@@ -651,28 +659,17 @@ public class GalaxyBuilderApp {
     }
 
 
-    private void displaySolarSystem(String solarSystemName) {
-        print("\t" + solarSystemName);
-    }
-
     private void displayCentralBodies(boolean binary) {
-        if (binary) {
-            print("\nChoose a central body!:");
-            print("\tbh -> Black Hole");
-            print("\tns -> Neutron Star");
-            print("\tgs -> Giant Star");
-            print("\twd -> White Dwarf");
-
-        } else {
-            print("\nChoose a central body!:");
-            print("\tbh -> Black Hole");
-            print("\tns -> Neutron Star");
-            print("\tgs -> Giant Star");
-            print("\twd -> White Dwarf");
+        print("\nChoose a central body!:");
+        print("\tbh -> Black Hole");
+        print("\tns -> Neutron Star");
+        print("\tgs -> Giant Star");
+        print("\twd -> White Dwarf");
+        if (!binary) {
             print("\tby -> Binary (You will choose two more central bodies)");
-
         }
     }
+
 
     private double inputPositiveNumber() {
         boolean keepGoing = true;
@@ -691,6 +688,7 @@ public class GalaxyBuilderApp {
         }
         return number;
     }
+
 
     private void print(String println) {
         System.out.println(println);
