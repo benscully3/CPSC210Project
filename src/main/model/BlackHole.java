@@ -5,7 +5,7 @@ public class BlackHole extends CentralBody {
     // EFFECT: constructs black hole based on mass
     public BlackHole(String name, double mass) {
         this.mass = mass;
-        this.radius = 4.2e-6 * mass;
+        this.radius = 2.95 * mass;
         this.name = name;
         this.centralBodyType = "Black Hole";
     }

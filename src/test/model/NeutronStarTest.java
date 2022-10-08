@@ -16,7 +16,7 @@ public class NeutronStarTest {
 
     @Test
     public void neutronStarTest() {
-        radius = 4.6e-6 * Math.pow(1.8, -1 / 3);
+        radius = 3.19 * Math.pow(1.8, -0.33);
         assertEquals(1.8, neutronStar.getMass());
         assertEquals(radius, neutronStar.getRadius());
         assertEquals("Neutron Star", neutronStar.getCentralBodyType());

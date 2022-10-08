@@ -60,6 +60,11 @@ public class SolarSystem extends Body {
 
     }
 
+    public void clearPlanets(){
+        planets.clear();
+        planetCount = 0;
+    }
+
     // REQUIRES: planet must be in solar system
     // EFFECTS: get planet based on its key (name)
     public Planet getPlanet(String planetName) {

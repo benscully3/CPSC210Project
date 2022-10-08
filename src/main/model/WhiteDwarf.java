@@ -6,7 +6,7 @@ public class WhiteDwarf extends Star {
     // EFFECT: construct a white dwarf based off of mass
     public WhiteDwarf(String name, double mass) {
         this.mass = mass;
-        this.radius = 0.0085 * Math.pow(mass, -1 / 3);
+        this.radius = 5916 * Math.pow(mass, -0.33);
         this.name = name;
         this.centralBodyType = "White Dwarf";
     }

@@ -12,7 +12,7 @@ public class WhiteDwarfTest {
     @Test
     public void constructorTest() {
         whiteDwarf = new WhiteDwarf("white dwarf", 0.7);
-        radius = 0.0085 * Math.pow(0.7, -1 / 3);
+        radius = 5916 * Math.pow(0.7, -0.33);
         assertEquals(0.7, whiteDwarf.getMass());
         assertEquals(radius, whiteDwarf.getRadius());
         assertEquals("white dwarf", whiteDwarf.getName());

@@ -351,12 +351,7 @@ public class GalaxyBuilderApp {
             print("\nAdd a planet!");
             addPlanet(solarSystem.getName());
         } else {
-            print("\nChoose what to do:");
-            print("\ta -> Add a new planet");
-            print("\tr -> Remove a planet");
-            print("\td -> Display solar system data");
-            print("\tback -> Back to main page");
-
+            displaySolarSystemOptions(solarSystem);
             while (keepGoing) {
                 command = input.next();
                 command = command.toLowerCase();
@@ -374,17 +369,87 @@ public class GalaxyBuilderApp {
         }
     }
 
+    private void displaySolarSystemOptions(SolarSystem solarSystem) {
+        print("\nChoose what to do:");
+        print("\ta -> Add a new planet");
+        print("\tr -> Remove a planet");
+        print("\td -> Display solar system data");
+        if (solarSystem.getCentralBody().canSupernova()){
+            print("\ts -> Supernova");
+        }
+        print("\tback -> Back to main page");
+    }
+
     private void processEditSolarSystemCommand(String command, HashMap<String, Planet> planets,
                                                String solarSystemName) throws BadCommand {
+        SolarSystem solarSystem = galaxy.getSolarSystem(solarSystemName);
+        boolean certain;
+
         if (command.equals("a")) {
             addPlanet(solarSystemName);
         } else if (command.equals("r")) {
-            removePlanet(planets);
+            removePlanet(planets, solarSystem);
         } else if (command.equals("d")) {
             displaySolarSystemData(solarSystemName, planets);
+        } else if (command.equals("s")){
+            certain = checkCertain();
+            if (certain) {
+                supernova(solarSystem);
+            } else {
+                return;
+            }
         } else {
             throw new BadCommand();
         }
+    }
+
+    private boolean checkCertain() {
+        String command;
+        boolean keepGoing = true;
+
+        print("\nAre you sure you want your star to go supernova?");
+        print("It will destroy the solar system, leaving only a black hole.");
+        print("\ty -> Yes, make it explode!");
+        print("\tn -> No, on second thought, I'll pass");
+        while (keepGoing) {
+            command = input.next();
+            if (command.equals("y")){
+                return true;
+            } else if (command.equals("n")){
+                return false;
+            }
+        }
+        return false;
+    }
+
+    private void supernova(SolarSystem solarSystem) {
+        CentralBody centralBody;
+        double centralBodyMass;
+        String centralBodyName;
+        String solarSystemName;
+
+        solarSystemName = solarSystem.getName();
+        galaxy.removeSolarSystem(solarSystemName);
+
+        centralBody = solarSystem.getCentralBody();
+        centralBodyMass = centralBody.getMass();
+        centralBodyName = centralBody.getName();
+        centralBody = new BlackHole(centralBodyName, centralBodyMass);
+
+        solarSystem = new SolarSystem(solarSystemName, centralBody);
+        try {
+            galaxy.addSolarSystem(solarSystem);
+        } catch (Exception e){}
+
+        drawSupernova();
+    }
+
+    private void drawSupernova() {
+        print("-   * \\ . **   / *  -");
+        print("   .  *\\**||*./*  *");
+        print("*  -*-*-!BOOM!-*-*-  *");
+        print("  *   */**||**\\*  *");
+        print("- .*  /   -*   \\ .  -");
     }
 
     private void displaySolarSystemData(String solarSystemName, HashMap<String, Planet> planets) {
@@ -417,7 +482,11 @@ public class GalaxyBuilderApp {
         print("\n CENTRAL BODY:");
         print("\nName: " + name + " - " + centralBodyType);
         print("\tMass: " + mass + " Solar masses");
-        print("\tRadius: " + radius + " Solar radii");
+        if (centralBodyType.equals("Giant Star")) {
+            print("\tRadius: " + radius + " Solar radii");
+        } else {
+            print("\tRadius: " + radius + " kilometers");
+        }
 
         if (centralBodyType.equals("Giant Star")) {
             GiantStar giantStar = (GiantStar) centralBody;
@@ -452,7 +521,7 @@ public class GalaxyBuilderApp {
         print("\t-Orbit Size: " + orbit + " Earth orbits");
     }
 
-    private void removePlanet(HashMap<String, Planet> planets) {
+    private void removePlanet(HashMap<String, Planet> planets, SolarSystem solarSystem) {
         boolean keepGoing = true;
         String command = null;
         Planet planet = null;
@@ -469,6 +538,7 @@ public class GalaxyBuilderApp {
             command = command.toLowerCase();
             if (command.equals("back")) {
                 keepGoing = false;
+                return;
             } else {
                 try {
                     planet = processPlanetCommand(command, planets);
@@ -478,9 +548,9 @@ public class GalaxyBuilderApp {
                 }
             }
         }
-        planets.remove(planet.getName());
+        solarSystem.removePlanet(planet.getName());
+        // planets.remove(planet.getName());
         print("Success! " + planet.getName() + " was removed.");
-
     }
 
     private Planet processPlanetCommand(String command, HashMap<String, Planet> planets) throws BadCommand {
@@ -491,7 +561,6 @@ public class GalaxyBuilderApp {
             }
         }
         throw new BadCommand();
-
     }
 
     private void displayPlanetName(String planetName) {

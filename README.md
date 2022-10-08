@@ -37,5 +37,7 @@ have learned in my studies.
 - As a user, I want to be able to add solar systems to my galaxy.
 - As a user, I want to be able to choose the type of central body in 
 a solar system.
-- As a user, I want to be able to add planets to a solar system
+- As a user, I want to be able to add multiple planets to a solar system
 - As a user, I want to be able to remove planets from a solar system
+- As a user, I want to be able to make a star go supernova
+- As a user, I want to be able to see my solar systems

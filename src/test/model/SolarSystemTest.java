@@ -149,7 +149,18 @@ public class SolarSystemTest {
     @Test
     public void checkCollisionTestJustFalse() {
         assertFalse(solarSystem.checkCollision(planet1, planet3));
+    }
 
+    @Test
+    public void clearPlanetsTest(){
+        assertFalse(solarSystem.addPlanet(planet1));
+        assertFalse(solarSystem.addPlanet(planet2));
+        assertFalse(solarSystem.addPlanet(planet3));
+        assertEquals(3, solarSystem.getPlanetCount());
+
+        solarSystem.clearPlanets();
+        assertEquals(0, solarSystem.getPlanetCount());
+        assertEquals(planets, solarSystem.getPlanets());
     }
 
 }
