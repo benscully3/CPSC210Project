@@ -1,3 +1,4 @@
 package Exceptions;
 
-public class NoExistingPlanet extends Exception{}
+public class NoExistingPlanet extends Exception {
+}

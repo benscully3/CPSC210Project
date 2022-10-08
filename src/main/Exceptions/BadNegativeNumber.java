@@ -1,3 +1,4 @@
 package Exceptions;
 
-public class BadNegativeNumber extends Exception{}
+public class BadNegativeNumber extends Exception {
+}

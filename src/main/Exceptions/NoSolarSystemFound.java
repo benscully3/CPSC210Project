@@ -1,3 +1,4 @@
 package Exceptions;
 
-public class NoSolarSystemFound extends Exception{}
+public class NoSolarSystemFound extends Exception {
+}

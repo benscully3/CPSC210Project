@@ -152,7 +152,7 @@ public class SolarSystemTest {
     }
 
     @Test
-    public void clearPlanetsTest(){
+    public void clearPlanetsTest() {
         assertFalse(solarSystem.addPlanet(planet1));
         assertFalse(solarSystem.addPlanet(planet2));
         assertFalse(solarSystem.addPlanet(planet3));

@@ -1,3 +1,4 @@
 package Exceptions;
 
-public class NotANumber extends Exception{}
+public class NotANumber extends Exception {
+}

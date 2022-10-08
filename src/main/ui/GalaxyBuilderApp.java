@@ -374,7 +374,7 @@ public class GalaxyBuilderApp {
         print("\ta -> Add a new planet");
         print("\tr -> Remove a planet");
         print("\td -> Display solar system data");
-        if (solarSystem.getCentralBody().canSupernova()){
+        if (solarSystem.getCentralBody().canSupernova()) {
             print("\ts -> Supernova");
         }
         print("\tback -> Back to main page");
@@ -391,7 +391,7 @@ public class GalaxyBuilderApp {
             removePlanet(planets, solarSystem);
         } else if (command.equals("d")) {
             displaySolarSystemData(solarSystemName, planets);
-        } else if (command.equals("s")){
+        } else if (command.equals("s")) {
             certain = checkCertain();
             if (certain) {
                 supernova(solarSystem);
@@ -413,9 +413,9 @@ public class GalaxyBuilderApp {
         print("\tn -> No, on second thought, I'll pass");
         while (keepGoing) {
             command = input.next();
-            if (command.equals("y")){
+            if (command.equals("y")) {
                 return true;
-            } else if (command.equals("n")){
+            } else if (command.equals("n")) {
                 return false;
             }
         }
@@ -439,7 +439,8 @@ public class GalaxyBuilderApp {
         solarSystem = new SolarSystem(solarSystemName, centralBody);
         try {
             galaxy.addSolarSystem(solarSystem);
-        } catch (Exception e){}
+        } catch (Exception e) {
+        }
 
         drawSupernova();
     }

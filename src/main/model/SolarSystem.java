@@ -60,7 +60,7 @@ public class SolarSystem extends Body {
 
     }
 
-    public void clearPlanets(){
+    public void clearPlanets() {
         planets.clear();
         planetCount = 0;
     }

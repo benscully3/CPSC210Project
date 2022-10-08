@@ -1,3 +1,4 @@
 package Exceptions;
 
-public class NameAlreadyUsed extends Exception{}
+public class NameAlreadyUsed extends Exception {
+}
