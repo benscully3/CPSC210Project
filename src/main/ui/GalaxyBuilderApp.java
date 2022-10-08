@@ -22,6 +22,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Initialize app and open main page
     private void runGalaxyBuilder() {
         boolean keepGoing = true;
         String command;
@@ -43,6 +44,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Initialize app
     private void init() {
         String command;
 
@@ -55,6 +57,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Display the main menu
     private void displayMainMenu() {
         print("\n GALAXY: " + galaxy.getName());
         print(" ------");
@@ -69,6 +72,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: process command entered from main menu
     private void processMainCommand(String command) {
         if (galaxy.getSolarSystemCount() == 0) {
             if (command.equals("n")) {
@@ -86,7 +90,7 @@ public class GalaxyBuilderApp {
             } else if (command.equals("e")) {
                 editSolarSystems();
             } else if (command.equals("d")) {
-                displaySolarSystems();
+                displayGalaxy();
             } else {
                 System.out.println("Selection not valid :(, try again");
             }
@@ -94,7 +98,8 @@ public class GalaxyBuilderApp {
     }
 
 
-    private void displaySolarSystems() {
+    // EFFECT: Display galaxy and solar systems within it
+    private void displayGalaxy() {
         String name = galaxy.getName();
         HashMap<String, SolarSystem> solarSystems = galaxy.getSolarSystems();
         boolean keepGoing = true;
@@ -115,6 +120,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Display basic info of a solar system
     private void displaySolarSystemInfo(SolarSystem solarSystem) {
         String name = solarSystem.getName();
         String centralBodyType = solarSystem.getCentralBody().getCentralBodyType();
@@ -126,6 +132,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: User creates a new solar system
     private void newSolarSystem() {
         String name;
         CentralBody centralBody;
@@ -151,6 +158,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Processes what central body the user chose
     private CentralBody processCentralBodyCommand(boolean binary) {
         boolean keepGoing = true;
         String command;
@@ -180,6 +188,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Makes a giant star as a central body
     private CentralBody makeGiantStar() {
         GiantStar giantStar;
         String name;
@@ -196,6 +205,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Makes a white dwarf star as a central body
     private CentralBody makeWhiteDwarf() {
         WhiteDwarf whiteDwarf;
         String name;
@@ -222,6 +232,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Makes a neutron star as a central body
     private CentralBody makeNeutronStar() {
         NeutronStar neutronStar;
         String name;
@@ -248,6 +259,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Makes a black hole as a central body
     private CentralBody makeBlackHole() {
         BlackHole blackHole;
         String name;
@@ -274,6 +286,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Makes a binary system as a central body
     private CentralBody makeBinary() {
         Binary binary;
         CentralBody centralBody1;
@@ -296,6 +309,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Displays solar systems to edit and passes on user's choice
     private void editSolarSystems() {
         String command = null;
         boolean keepGoing = true;
@@ -323,10 +337,13 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: processes the command to choose which solar system to edit
     private void processSolarSystemCommand(String command, Set<String> solarSystemNames) throws BadCommand {
         for (String solarSystemName : solarSystemNames) {
             if (command.equals(solarSystemName)) {
-                editSolarSystem(solarSystemName);
+                SolarSystem solarSystem = galaxy.getSolarSystem(solarSystemName);
+                HashMap<String, Planet> planets = solarSystem.getPlanets();
+                displayEditSolarSystem(planets, solarSystem.getPlanetCount(), solarSystem);
                 return;
             }
         }
@@ -334,16 +351,8 @@ public class GalaxyBuilderApp {
     }
 
 
-    private void editSolarSystem(String solarSystemName) {
-        SolarSystem solarSystem = galaxy.getSolarSystem(solarSystemName);
-        HashMap<String, Planet> planets = solarSystem.getPlanets();
-        displayEditSolarSystem(planets, solarSystem.getPlanetCount(), solarSystem);
-
-    }
-
-
+    // EFFECT: depending on planet count, show how solar system can be edited
     private void displayEditSolarSystem(HashMap<String, Planet> planets, int planetCount, SolarSystem solarSystem) {
-        String command = null;
         boolean keepGoing = true;
 
         if (planetCount == 0) {
@@ -352,7 +361,7 @@ public class GalaxyBuilderApp {
         } else {
             displaySolarSystemOptions(solarSystem);
             while (keepGoing) {
-                command = input.next();
+                String command = input.next();
                 command = command.toLowerCase();
                 if (command.equals("back")) {
                     keepGoing = false;
@@ -369,6 +378,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: display the options for editing a solar system
     private void displaySolarSystemOptions(SolarSystem solarSystem) {
         print("\nChoose what to do:");
         print("\ta -> Add a new planet");
@@ -381,6 +391,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: process command to edit a solar system
     private void processEditSolarSystemCommand(String command, HashMap<String, Planet> planets,
                                                String solarSystemName) throws BadCommand {
         SolarSystem solarSystem = galaxy.getSolarSystem(solarSystemName);
@@ -397,7 +408,7 @@ public class GalaxyBuilderApp {
             if (certain) {
                 supernova(solarSystem);
             } else {
-                return;
+                return;  // return prevents BadComment from being thrown
             }
         } else {
             throw new BadCommand();
@@ -405,15 +416,15 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Checks if the user is certain they want a supernova
     private boolean checkCertain() {
         String command;
-        boolean keepGoing = true;
 
         print("\nAre you sure you want your star to go supernova?");
         print("It will destroy the solar system, leaving only a black hole.");
         print("\ty -> Yes, make it explode!");
         print("\tn -> No, on second thought, I'll pass");
-        while (keepGoing) {
+        while (true) {
             command = input.next();
             if (command.equals("y")) {
                 return true;
@@ -421,10 +432,10 @@ public class GalaxyBuilderApp {
                 return false;
             }
         }
-        return false;
     }
 
 
+    // EFFECT: Causes a supernova - clears planets, central body becomes black hole
     private void supernova(SolarSystem solarSystem) {
         CentralBody centralBody;
         double centralBodyMass;
@@ -443,12 +454,14 @@ public class GalaxyBuilderApp {
         try {
             galaxy.addSolarSystem(solarSystem);
         } catch (Exception e) {
+            // add.SolarSystem throws error, but never will in this case - empty catch block
         }
 
         drawSupernova();
     }
 
 
+    // EFFECT: Draw a supernova!
     private void drawSupernova() {
         print("-   * \\ . **   / *  -");
         print("   .  *\\**||*./*  *");
@@ -458,6 +471,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT:  display solar system data: central body and planets
     private void displaySolarSystemData(String solarSystemName, HashMap<String, Planet> planets) {
         CentralBody centralBody;
         String command;
@@ -481,6 +495,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: display central body data
     private void displayCentralBody(CentralBody centralBody) {
         String name = centralBody.getName();
         String mass = String.format("%.2f", centralBody.getMass());
@@ -503,6 +518,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: Display planet data
     private void displayPlanet(Planet p) {
         String moon = "No moon";
         String planetType = "Gas giant planet";
@@ -525,6 +541,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: remove a planet from a solar system
     private void removePlanet(HashMap<String, Planet> planets, SolarSystem solarSystem) {
         boolean keepGoing = true;
         String command = null;
@@ -551,6 +568,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: display planets that you can remove
     private void displayRemovePlanet(HashMap<String, Planet> planets) {
         Set<String> planetNames = planets.keySet();
         print("\nChoose a planet to remove - !This cannot be undone!");
@@ -561,6 +579,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: searches for planet to remove and returns it's name
     private Planet processPlanetCommand(String command, HashMap<String, Planet> planets) throws BadCommand {
         Set<String> planetNames = planets.keySet();
         for (String planetName : planetNames) {
@@ -572,6 +591,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: add a planet to a solar system
     private void addPlanet(String solarSystemName) {
         String planetName = "";
         boolean moon;
@@ -598,6 +618,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: display message depending on what happened with newly made planet
     private void madePlanet(boolean collide, double radius) {
         if (collide) {
             print("\nOh! The planet you added had the same orbit as a pre-existing one!");
@@ -612,6 +633,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT:  name a planet, won't accept duplicate names in a solar system
     private String namePlanet(SolarSystem solarSystem) {
         boolean keepGoing = true;
         String planetName = "";
@@ -620,7 +642,7 @@ public class GalaxyBuilderApp {
             planetName = input.next();
             planetName = planetName.toLowerCase();
             try {
-                checkName(planetName, solarSystem.getPlanets());
+                checkPlanetName(planetName, solarSystem.getPlanets());
                 keepGoing = false;
             } catch (NameAlreadyUsed e) {
                 print("\nThis solar system has a planet with that name already. Pick a different name");
@@ -630,6 +652,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: process whether user wants a moon for a planet
     private boolean processMoonCommand() {
         boolean keepGoing = true;
         String command;
@@ -649,7 +672,8 @@ public class GalaxyBuilderApp {
     }
 
 
-    private void checkName(String planetName, HashMap<String, Planet> planets) throws NameAlreadyUsed {
+    // EFFECT: check that a planet doesn't already have a given name in a solar system
+    private void checkPlanetName(String planetName, HashMap<String, Planet> planets) throws NameAlreadyUsed {
         Set<String> planetNames = planets.keySet();
         for (String pName : planetNames) {
             if (pName.equals(planetName)) {
@@ -659,6 +683,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: display options to choose from for a central body
     private void displayCentralBodies(boolean binary) {
         print("\nChoose a central body!:");
         print("\tbh -> Black Hole");
@@ -671,6 +696,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: has the user input a positive number
     private double inputPositiveNumber() {
         boolean keepGoing = true;
         double number = 0;
@@ -690,6 +716,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // EFFECT: prints a given string, easier to write than System.out.println()
     private void print(String println) {
         System.out.println(println);
     }
