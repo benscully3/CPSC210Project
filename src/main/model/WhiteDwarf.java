@@ -8,6 +8,7 @@ public class WhiteDwarf extends Star {
         this.mass = mass;
         this.radius = 0.0085 * Math.pow(mass, -1 / 3);
         this.name = name;
+        this.centralBodyType = "White Dwarf";
     }
 
     // REQUIRES: must be in a binary
