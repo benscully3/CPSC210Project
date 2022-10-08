@@ -21,7 +21,7 @@ public class SolarSystemTest {
     private HashMap<String, Planet> planets = new HashMap<>();
 
     @BeforeEach
-    public void runBefore(){
+    public void runBefore() {
         blackHole = new BlackHole("BH", 10);
         planet1 = new Planet("planet1", 10, 3, false);
         planet2 = new Planet("planet2", 3, 5, true);
@@ -32,7 +32,7 @@ public class SolarSystemTest {
     }
 
     @Test
-    public void constructorTest(){
+    public void constructorTest() {
         assertEquals(blackHole, solarSystem.getCentralBody());
         assertEquals(planets, solarSystem.getPlanets());
         assertEquals(0, solarSystem.getPlanetCount());
@@ -40,8 +40,8 @@ public class SolarSystemTest {
     }
 
     @Test
-    public void addPlanetTest(){
-        solarSystem.addPlanet(planet1);
+    public void addPlanetTest() {
+        assertFalse(solarSystem.addPlanet(planet1));
         planets.put("planet1", planet1);
         assertEquals(1, solarSystem.getPlanetCount());
         assertEquals(planet1, solarSystem.getPlanet("planet1"));
@@ -49,29 +49,30 @@ public class SolarSystemTest {
     }
 
     @Test
-    public void addPlanetTestMultipleNoCollide(){
-        solarSystem.addPlanet(planet1);
+    public void addPlanetTestMultipleNoCollide() {
+        assertFalse(solarSystem.addPlanet(planet1));
         planets.put("planet1", planet1);
         assertEquals(1, solarSystem.getPlanetCount());
         assertEquals(planet1, solarSystem.getPlanet("planet1"));
         assertEquals(planets, solarSystem.getPlanets());
 
-        solarSystem.addPlanet(planet2);
+        assertFalse(solarSystem.addPlanet(planet2));
         planets.put("planet2", planet2);
         assertEquals(2, solarSystem.getPlanetCount());
         assertEquals(planet2, solarSystem.getPlanet("planet2"));
         assertEquals(planets, solarSystem.getPlanets());
+
     }
 
     @Test
-    public void addPlanetTestMultipleCollide(){
-        solarSystem.addPlanet(planet1);
+    public void addPlanetTestMultipleCollide() {
+        assertFalse(solarSystem.addPlanet(planet1));
         planets.put("planet1", planet1);
         assertEquals(1, solarSystem.getPlanetCount());
         assertEquals(planet1, solarSystem.getPlanet("planet1"));
         assertEquals(planets, solarSystem.getPlanets());
 
-        solarSystem.addPlanet(planet4);
+        assertTrue(solarSystem.addPlanet(planet4));
         newPlanet = new Planet("planet1", planet1.getRadius() + planet4.getRadius(),
                 planet1.getOrbitSize(), true);
         planets.remove("planet1");
@@ -85,14 +86,14 @@ public class SolarSystemTest {
     }
 
     @Test
-    public void addPlanetTestMultipleJustNoCollide(){
-        solarSystem.addPlanet(planet1);
+    public void addPlanetTestMultipleJustNoCollide() {
+        assertFalse(solarSystem.addPlanet(planet1));
         planets.put("planet1", planet1);
         assertEquals(1, solarSystem.getPlanetCount());
         assertEquals(planet1, solarSystem.getPlanet("planet1"));
         assertEquals(planets, solarSystem.getPlanets());
 
-        solarSystem.addPlanet(planet3);
+        assertFalse(solarSystem.addPlanet(planet3));
         planets.put("planet3", planet3);
         assertEquals(2, solarSystem.getPlanetCount());
         assertEquals(planet3, solarSystem.getPlanet("planet3"));
@@ -101,7 +102,7 @@ public class SolarSystemTest {
 
 
     @Test
-    public void removePlanetTest(){
+    public void removePlanetTest() {
         solarSystem.addPlanet(planet1);
         assertEquals(1, solarSystem.getPlanetCount());
 
@@ -112,7 +113,7 @@ public class SolarSystemTest {
     }
 
     @Test
-    public void removePlanetTestMultiple(){
+    public void removePlanetTestMultiple() {
         solarSystem.addPlanet(planet1);
         solarSystem.addPlanet(planet2);
         solarSystem.addPlanet(planet3);
@@ -136,17 +137,17 @@ public class SolarSystemTest {
     }
 
     @Test
-    public void checkCollisionTestTrue(){
+    public void checkCollisionTestTrue() {
         assertTrue(solarSystem.checkCollision(planet1, planet4));
     }
 
     @Test
-    public void checkCollisionTestFalse(){
+    public void checkCollisionTestFalse() {
         assertFalse(solarSystem.checkCollision(planet1, planet2));
     }
 
     @Test
-    public void checkCollisionTestJustFalse(){
+    public void checkCollisionTestJustFalse() {
         assertFalse(solarSystem.checkCollision(planet1, planet3));
 
     }

@@ -1,6 +1,7 @@
 package model;
 
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class WhiteDwarfTest {
@@ -9,34 +10,36 @@ public class WhiteDwarfTest {
 
 
     @Test
-    public void constructorTest(){
-        whiteDwarf = new WhiteDwarf("white dwarf",0.7);
-        radius = 0.0085 * Math.pow(0.7, -1/3);
+    public void constructorTest() {
+        whiteDwarf = new WhiteDwarf("white dwarf", 0.7);
+        radius = 0.0085 * Math.pow(0.7, -1 / 3);
         assertEquals(0.7, whiteDwarf.getMass());
         assertEquals(radius, whiteDwarf.getRadius());
+        assertEquals("white dwarf", whiteDwarf.getName());
+        assertEquals("White Dwarf", whiteDwarf.getCentralBodyType());
     }
 
     @Test
-    public void canSupernovaTestYes(){
-        whiteDwarf = new WhiteDwarf("white dwarf",1.6);
+    public void canSupernovaTestYes() {
+        whiteDwarf = new WhiteDwarf("white dwarf", 1.6);
         assertTrue(whiteDwarf.canSupernova());
     }
 
     @Test
-    public void canSupernovaTestJustYes(){
-        whiteDwarf = new WhiteDwarf("white dwarf",1.4);
+    public void canSupernovaTestJustYes() {
+        whiteDwarf = new WhiteDwarf("white dwarf", 1.4);
         assertTrue(whiteDwarf.canSupernova());
     }
 
     @Test
-    public void canSupernovaTestNo(){
-        whiteDwarf = new WhiteDwarf("white dwarf",0.8);
+    public void canSupernovaTestNo() {
+        whiteDwarf = new WhiteDwarf("white dwarf", 0.8);
         assertFalse(whiteDwarf.canSupernova());
     }
 
     @Test
-    public void canSupernovaTestJustNo(){
-        whiteDwarf = new WhiteDwarf("white dwarf",1.39);
+    public void canSupernovaTestJustNo() {
+        whiteDwarf = new WhiteDwarf("white dwarf", 1.39);
         assertFalse(whiteDwarf.canSupernova());
     }
 }

@@ -7,15 +7,16 @@ public abstract class Body {
 
     // MODIFIES: this
     // EFFECT: change the galaxies name
-    public void changeName(String newName){
+    public void changeName(String newName) {
         this.name = newName;
     }
 
-    public double getMass(){
+    public double getMass() {
 
         return mass;
     }
-    public double getRadius(){
+
+    public double getRadius() {
 
         return this.radius;
     }

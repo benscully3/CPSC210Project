@@ -2,6 +2,7 @@ package model;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class PlanetTest {
@@ -12,14 +13,14 @@ public class PlanetTest {
     private double rhoRocky = 0.18; // rocky planet density
 
     @BeforeEach
-    public void runBefore(){
+    public void runBefore() {
         rockyPlanet = new Planet("Rocky Planet");
         gasPlanet = new Planet("Gas Planet", 10, 4, false);
         planetWithMoon = new Planet("Planet with moon", 2, 2, true);
     }
 
     @Test
-    public void constructorTest(){
+    public void constructorTest() {
         assertEquals(10, gasPlanet.getRadius());
         assertEquals(calculateMass(false, 10), gasPlanet.getMass());
         assertEquals("Gas Planet", gasPlanet.getName());
@@ -43,16 +44,13 @@ public class PlanetTest {
 
     }
 
-    @Test
-    public void collideTest(){}
-
-    private double calculateMass(boolean isRocky, double radius){
+    private double calculateMass(boolean isRocky, double radius) {
         double mass;
         double base;
 
-        if (isRocky){
+        if (isRocky) {
             mass = 4 * 3.14 * rhoRocky * Math.pow(radius, 3);
-        }else{
+        } else {
             mass = 4 * 3.14 * rhoGas * Math.pow(radius, 3);
         }
         return mass;

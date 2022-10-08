@@ -1,5 +1,6 @@
 package model;
 
+import Exceptions.NameAlreadyUsed;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,7 +21,7 @@ public class GalaxyTest {
     private Galaxy galaxy;
 
     @BeforeEach
-    public void runBefore(){
+    public void runBefore() {
         neutronStar = new NeutronStar("NS", 1.6);
         blackHole = new BlackHole("BH", 15);
         giantStar = new GiantStar("GS", 10);
@@ -32,7 +33,7 @@ public class GalaxyTest {
     }
 
     @Test
-    public void constructorTest(){
+    public void constructorTest() {
         galaxy = new Galaxy("Galaxy");
         assertEquals("Galaxy", galaxy.getName());
         assertEquals(solarSystems, galaxy.getSolarSystems());
@@ -40,7 +41,7 @@ public class GalaxyTest {
     }
 
     @Test
-    public void addSolarSystemTest(){
+    public void addSolarSystemTest() throws NameAlreadyUsed {
         galaxy = new Galaxy("Galaxy");
         galaxy.addSolarSystem(solarSystem1);
         solarSystems.put("SS1", solarSystem1);
@@ -51,7 +52,7 @@ public class GalaxyTest {
     }
 
     @Test
-    public void addSolarSystemTestMultiple(){
+    public void addSolarSystemTestMultiple() throws NameAlreadyUsed {
         galaxy = new Galaxy("Galaxy");
         galaxy.addSolarSystem(solarSystem1);
         solarSystems.put("SS1", solarSystem1);
@@ -69,7 +70,7 @@ public class GalaxyTest {
     }
 
     @Test
-    public void removeSolarSystemTest(){
+    public void removeSolarSystemTest() throws NameAlreadyUsed {
         galaxy = new Galaxy("Galaxy");
         galaxy.addSolarSystem(solarSystem1);
         galaxy.addSolarSystem(solarSystem2);
@@ -85,7 +86,7 @@ public class GalaxyTest {
     }
 
     @Test
-    public void removeSolarSystemTestMultiple(){
+    public void removeSolarSystemTestMultiple() throws NameAlreadyUsed {
         galaxy = new Galaxy("Galaxy");
         galaxy.addSolarSystem(solarSystem1);
         galaxy.addSolarSystem(solarSystem2);
@@ -110,7 +111,7 @@ public class GalaxyTest {
     }
 
     @Test
-    public void changeNameTest(){
+    public void changeNameTest() {
         galaxy = new Galaxy("Galaxy");
         assertEquals("Galaxy", galaxy.getName());
         galaxy.changeName("New name");
