@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 
 public class GalaxyTest {
     private NeutronStar neutronStar;
@@ -67,6 +69,21 @@ public class GalaxyTest {
         assertEquals(2, galaxy.getSolarSystemCount());
         assertEquals(solarSystem1, galaxy.getSolarSystem("SS1"));
         assertEquals(solarSystems, galaxy.getSolarSystems());
+    }
+
+    @Test
+    public void addSolarSystemTestMultipleNameUsed() throws NameAlreadyUsed {
+        galaxy = new Galaxy("Galaxy");
+        galaxy.addSolarSystem(solarSystem1);
+        solarSystems.put("SS1", solarSystem1);
+
+        assertEquals(1, galaxy.getSolarSystemCount());
+        assertEquals(solarSystem1, galaxy.getSolarSystem("SS1"));
+        assertEquals(solarSystems, galaxy.getSolarSystems());
+
+        assertThrows(NameAlreadyUsed.class, () -> {
+            galaxy.addSolarSystem(solarSystem1);
+        }, "NameAlreadyUsed throw was expected");
     }
 
     @Test
