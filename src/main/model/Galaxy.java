@@ -1,6 +1,6 @@
 package model;
 
-import Exceptions.NameAlreadyUsed;
+import exceptions.NameAlreadyUsed;
 
 import java.util.HashMap;
 

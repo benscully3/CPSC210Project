@@ -5,8 +5,8 @@ public class Planet extends Body {
     private double orbitSize;
     private boolean moon; // does the planet have one moon
     private boolean rocky; // if false: gas giant
-    private final double RHO_GAS = 0.04; // gas planet density
-    private final double RHO_ROCKY = 0.18; // rocky planet density
+    private static final double RHO_GAS = 0.04; // gas planet density
+    private static final double RHO_ROCKY = 0.18; // rocky planet density
 
 
     // EFFECT: create a default rocky planet with no moon

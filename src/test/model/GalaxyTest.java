@@ -1,6 +1,6 @@
 package model;
 
-import Exceptions.NameAlreadyUsed;
+import exceptions.NameAlreadyUsed;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

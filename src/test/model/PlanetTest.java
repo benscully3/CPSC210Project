@@ -9,8 +9,8 @@ public class PlanetTest {
     private Planet gasPlanet;
     private Planet rockyPlanet;
     private Planet planetWithMoon;
-    private final double RHO_GAS = 0.04; // gas planet density
-    private final double RHO_ROCKY = 0.18; // rocky planet density
+    private static final double RHO_GAS = 0.04; // gas planet density
+    private static final double RHO_ROCKY = 0.18; // rocky planet density
 
     @BeforeEach
     public void runBefore() {

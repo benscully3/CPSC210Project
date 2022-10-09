@@ -1,8 +1,8 @@
 package ui;
 
-import Exceptions.BadCommand;
-import Exceptions.BadNegativeNumber;
-import Exceptions.NameAlreadyUsed;
+import exceptions.BadCommand;
+import exceptions.BadNegativeNumber;
+import exceptions.NameAlreadyUsed;
 import model.*;
 
 import java.util.HashMap;
@@ -177,7 +177,7 @@ public class GalaxyBuilderApp {
             } else if (command.equals("gs")) {
                 return makeGiantStar();
             } else if (command.equals("by")) {
-                if (binary){
+                if (binary) {
                     print("Selection not valid :(, try again");
                 } else {
                     return makeBinary();
@@ -198,8 +198,8 @@ public class GalaxyBuilderApp {
         print("\nName your star!:");
         name = input.next();
         name = name.toLowerCase();
-        print("\nChoose a number for your star's brightness! " +
-                "(entering 2 means twice as bright as the sun)");
+        print("\nChoose a number for your star's brightness! "
+                + "(entering 2 means twice as bright as the sun)");
         luminosity = inputPositiveNumber();
         giantStar = new GiantStar(name, luminosity);
         return giantStar;
@@ -216,8 +216,8 @@ public class GalaxyBuilderApp {
         print("\nName your star!:");
         name = input.next();
         name = name.toLowerCase();
-        print("\nChoose a number for your star's mass! " +
-                "(entering 2 means twice the mass of the sun)");
+        print("\nChoose a number for your star's mass! "
+                + "(entering 2 means twice the mass of the sun)");
         print("\nWhite Dwarfs must have a mass under 1.4 solar masses");
 
         while (keepGoing) {
@@ -243,8 +243,8 @@ public class GalaxyBuilderApp {
         print("\nName your star!:");
         name = input.next();
         name = name.toLowerCase();
-        print("\nChoose a number for your star's mass! " +
-                "(entering 2 means twice the mass of the sun)");
+        print("\nChoose a number for your star's mass! "
+                + "(entering 2 means twice the mass of the sun)");
         print("\n Neutron star mass must be between 1.4 and 2.5 solar masses");
 
         while (keepGoing) {
@@ -270,8 +270,8 @@ public class GalaxyBuilderApp {
         print("\nName your black hole!:");
         name = input.next();
         name = name.toLowerCase();
-        print("\nChoose a number for your black hole's mass! " +
-                "(entering 2 means twice the mass of the sun)");
+        print("\nChoose a number for your black hole's mass! "
+                + "(entering 2 means twice the mass of the sun)");
         print("\nBlack Hole mass must be at least 2.5 solar masses!");
 
         while (keepGoing) {
@@ -671,10 +671,10 @@ public class GalaxyBuilderApp {
 
 
     // EFFECT: check that a planet doesn't already have a given name in a solar system
-    private void checkPlanetName(String planetName, HashMap<String, Planet> planets) throws NameAlreadyUsed {
+    private void checkPlanetName(String searchPlanetName, HashMap<String, Planet> planets) throws NameAlreadyUsed {
         Set<String> planetNames = planets.keySet();
-        for (String pName : planetNames) {
-            if (pName.equals(planetName)) {
+        for (String planetName : planetNames) {
+            if (planetName.equals(searchPlanetName)) {
                 throw new NameAlreadyUsed();
             }
         }
