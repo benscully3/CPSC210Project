@@ -16,7 +16,7 @@ public class GalaxyBuilderApp {
     private Galaxy galaxy;
     private Scanner input;
 
-
+    // EFFECT: Runs galaxy builder application
     public GalaxyBuilderApp() {
         runGalaxyBuilder();
     }
@@ -44,7 +44,8 @@ public class GalaxyBuilderApp {
     }
 
 
-    // EFFECT: Initialize app
+    // MODIFIES: This
+    // EFFECT: Initialize galaxy
     private void init() {
         String command;
 
@@ -72,6 +73,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // MODIFIES: this
     // EFFECT: process command entered from main menu
     private void processMainCommand(String command) {
         if (galaxy.getSolarSystemCount() == 0) {
@@ -132,6 +134,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // MODIFIES: this
     // EFFECT: User creates a new solar system
     private void newSolarSystem() {
         String name;
@@ -160,10 +163,9 @@ public class GalaxyBuilderApp {
 
     // EFFECT: Processes what central body the user chose
     private CentralBody processCentralBodyCommand(boolean binary) {
-        boolean keepGoing = true;
         String command;
 
-        while (keepGoing) {
+        while (true) {
             command = input.next();
             command = command.toLowerCase();
             if (command.equals("bh")) {
@@ -184,7 +186,6 @@ public class GalaxyBuilderApp {
                 print("Selection not valid :(, try again");
             }
         }
-        return null;
     }
 
 
@@ -192,7 +193,7 @@ public class GalaxyBuilderApp {
     private CentralBody makeGiantStar() {
         GiantStar giantStar;
         String name;
-        double luminosity = 0;
+        double luminosity;
 
         print("\nName your star!:");
         name = input.next();
@@ -311,7 +312,7 @@ public class GalaxyBuilderApp {
 
     // EFFECT: Displays solar systems to edit and passes on user's choice
     private void editSolarSystems() {
-        String command = null;
+        String command;
         boolean keepGoing = true;
 
         HashMap<String, SolarSystem> solarSystems = galaxy.getSolarSystems();
@@ -407,8 +408,6 @@ public class GalaxyBuilderApp {
             certain = checkCertain();
             if (certain) {
                 supernova(solarSystem);
-            } else {
-                return;  // return prevents BadComment from being thrown
             }
         } else {
             throw new BadCommand();
@@ -435,6 +434,7 @@ public class GalaxyBuilderApp {
     }
 
 
+    // MODIFIES: this
     // EFFECT: Causes a supernova - clears planets, central body becomes black hole
     private void supernova(SolarSystem solarSystem) {
         CentralBody centralBody;
@@ -456,7 +456,6 @@ public class GalaxyBuilderApp {
         } catch (Exception e) {
             // add.SolarSystem throws error, but never will in this case - empty catch block
         }
-
         drawSupernova();
     }
 
@@ -541,10 +540,11 @@ public class GalaxyBuilderApp {
     }
 
 
+    // MODIFIES: SolarSystem
     // EFFECT: remove a planet from a solar system
     private void removePlanet(HashMap<String, Planet> planets, SolarSystem solarSystem) {
         boolean keepGoing = true;
-        String command = null;
+        String command;
         Planet planet = null;
 
         displayRemovePlanet(planets);
@@ -552,7 +552,6 @@ public class GalaxyBuilderApp {
             command = input.next();
             command = command.toLowerCase();
             if (command.equals("back")) {
-                keepGoing = false;
                 return;
             } else {
                 try {
@@ -579,7 +578,7 @@ public class GalaxyBuilderApp {
     }
 
 
-    // EFFECT: searches for planet to remove and returns it's name
+    // EFFECT: searches for planet to remove and returns its name if found, throws error otherwise
     private Planet processPlanetCommand(String command, HashMap<String, Planet> planets) throws BadCommand {
         Set<String> planetNames = planets.keySet();
         for (String planetName : planetNames) {
@@ -591,13 +590,14 @@ public class GalaxyBuilderApp {
     }
 
 
-    // EFFECT: add a planet to a solar system
+    // MODIFIES: SolarSystem
+    // EFFECT: add a planet to a solar system from user input
     private void addPlanet(String solarSystemName) {
-        String planetName = "";
+        String planetName;
         boolean moon;
         double radius;
         double orbitSize;
-        Planet planet = null;
+        Planet planet;
         boolean collide;
 
         SolarSystem solarSystem = galaxy.getSolarSystem(solarSystemName);
@@ -654,10 +654,9 @@ public class GalaxyBuilderApp {
 
     // EFFECT: process whether user wants a moon for a planet
     private boolean processMoonCommand() {
-        boolean keepGoing = true;
         String command;
 
-        while (keepGoing) {
+        while (true) {
             command = input.next();
             command = command.toLowerCase();
             if (command.equals("y")) {
@@ -668,7 +667,6 @@ public class GalaxyBuilderApp {
                 print("Please enter y or n :)");
             }
         }
-        return false;
     }
 
 
