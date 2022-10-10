@@ -53,6 +53,7 @@ public class Planet extends Body {
         return mass;
     }
 
+    // getters
     public double getOrbitSize() {
         return orbitSize;
     }

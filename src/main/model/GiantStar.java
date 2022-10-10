@@ -23,14 +23,12 @@ public class GiantStar extends Star {
         return true;
     }
 
-
+    // getters
     public double getLuminosity() {
-
         return this.luminosity;
     }
 
     public double getTemperature() {
-
         return TEMPERATURE;
     }
 }

@@ -50,6 +50,7 @@ public class Galaxy {
         return solarSystems.get(solarSystemName);
     }
 
+    // getters
     public HashMap<String, SolarSystem> getSolarSystems() {
         return solarSystems;
     }

@@ -7,6 +7,7 @@ public abstract class CentralBody extends Body {
     // EFFECT: Abstract function to check if a central body can go supernova
     public abstract boolean canSupernova();
 
+    // getters
     public String getCentralBodyType() {
         return centralBodyType;
     }

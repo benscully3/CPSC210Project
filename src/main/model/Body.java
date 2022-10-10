@@ -12,6 +12,7 @@ public abstract class Body {
         this.name = newName;
     }
 
+    // getters
     public double getMass() {
 
         return mass;

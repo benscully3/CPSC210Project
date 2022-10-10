@@ -71,6 +71,7 @@ public class SolarSystem extends Body {
         return planets.get(planetName);
     }
 
+    // getters
     public HashMap<String, Planet> getPlanets() {
         return planets;
     }

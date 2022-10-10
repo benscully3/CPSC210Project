@@ -20,6 +20,7 @@ public class Binary extends CentralBody {
         return false;
     }
 
+    // getters
     public CentralBody getCentralBody1() {
         return centralBody1;
     }
