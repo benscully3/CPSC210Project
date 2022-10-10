@@ -1,7 +1,7 @@
 package ui;
 
 import exceptions.BadCommand;
-import exceptions.BadNegativeNumber;
+import exceptions.NotPositiveNumber;
 import exceptions.NameAlreadyUsed;
 import model.*;
 
@@ -703,7 +703,7 @@ public class GalaxyBuilderApp {
             try {
                 number = parseDouble(input.next());
                 if (number <= 0) {
-                    throw new BadNegativeNumber();
+                    throw new NotPositiveNumber();
                 }
                 keepGoing = false;
             } catch (Exception e) {
