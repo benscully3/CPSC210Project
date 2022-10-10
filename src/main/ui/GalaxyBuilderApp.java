@@ -76,26 +76,26 @@ public class GalaxyBuilderApp {
     // MODIFIES: this
     // EFFECT: process command entered from main menu
     private void processMainCommand(String command) {
-        if (galaxy.getSolarSystemCount() == 0) {
-            if (command.equals("n")) {
-                newSolarSystem();
-            } else if (command.equals("c")) {
-                print("\n Enter new galaxy name:");
-                String newName = input.next();
-                galaxy.changeName(newName);
-            } else {
-                System.out.println("Selection not valid :(, try again");
-            }
-        } else {
-            if (command.equals("n")) {
-                newSolarSystem();
-            } else if (command.equals("e")) {
+        if (command.equals("n")) {
+            newSolarSystem();
+        } else if (command.equals("c")) {
+            print("\n Enter new galaxy name:");
+            String newName = input.next();
+            galaxy.changeName(newName);
+        } else if (command.equals("e")) {
+            if (galaxy.getSolarSystemCount() != 0) {
                 editSolarSystems();
-            } else if (command.equals("d")) {
+            } else {
+                print("Selection not valid :(, try again");
+            }
+        } else if (command.equals("d")) {
+            if (galaxy.getSolarSystemCount() != 0) {
                 displayGalaxy();
             } else {
-                System.out.println("Selection not valid :(, try again");
+                print("Selection not valid :(, try again");
             }
+        } else {
+            print("Selection not valid :(, try again");
         }
     }
 
