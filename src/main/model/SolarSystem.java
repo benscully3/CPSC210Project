@@ -2,6 +2,7 @@ package model;
 
 import java.util.HashMap;
 
+// class to represent a solar system with Planets, a central body and a name
 public class SolarSystem extends Body {
     private CentralBody centralBody;
     private HashMap<String, Planet> planets;  // planet list, key is planet name
@@ -9,7 +10,7 @@ public class SolarSystem extends Body {
     private String planetName;
 
     // MODIFIES: this
-    // EFFECTS: construct a solar system with a given central body and no planets
+    // EFFECTS: construct a solar system with a given central body, name and no planets
     public SolarSystem(String name, CentralBody centralBody) {
         this.centralBody = centralBody;
         planets = new HashMap<>();
@@ -21,7 +22,8 @@ public class SolarSystem extends Body {
     // EFFECTS: adds a planet to solar system, adds 1 to count
     //          if new planet collides with pre-existing planet
     //          add radii and masses, keep old planet name and
-    //          make the planet have a moon
+    //          make the planet now have a moon.
+    //          Return true if there was a collision, false if not.
     public boolean addPlanet(Planet planet) {
         for (Planet p : planets.values()) {
             if (checkCollision(planet, p)) {
@@ -48,6 +50,7 @@ public class SolarSystem extends Body {
         planetCount--;
     }
 
+    // EFFECT: returns true if two planets would collide (have the same radius)
     public boolean checkCollision(Planet planet1, Planet planet2) {
         double orbit1 = planet1.getOrbitSize();
         double orbit2 = planet2.getOrbitSize();
@@ -56,6 +59,7 @@ public class SolarSystem extends Body {
 
     }
 
+    // EFFECT: clear all planets from a SolarSystem
     public void clearPlanets() {
         planets.clear();
         planetCount = 0;
@@ -67,12 +71,10 @@ public class SolarSystem extends Body {
         return planets.get(planetName);
     }
 
-    // EFFECTS: gets all planets in solar system
     public HashMap<String, Planet> getPlanets() {
         return planets;
     }
 
-    // EFFECTS: get central body
     public CentralBody getCentralBody() {
         return centralBody;
     }

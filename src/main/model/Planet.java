@@ -1,6 +1,6 @@
 package model;
 
-// abstract class to represent a planet with orbit size and moon
+//  class to represent a planet with orbit size, moon, and type (rocky, or gas)
 public class Planet extends Body {
     private double orbitSize;
     private boolean moon; // does the planet have one moon
@@ -21,7 +21,9 @@ public class Planet extends Body {
         this.mass = calculateMass(this.rocky, 1);
     }
 
+    // REQUIRES: radius and orbitSize must be positive
     // EFFECT: create a gas or rocky planet based on radius with or without a moon
+    //         planets with radius < 5 are rocky, otherwise they are gas giants
     public Planet(String name, double radius, double orbitSize, boolean isMoon) {
         this.name = name;
         this.radius = radius;
@@ -37,6 +39,20 @@ public class Planet extends Body {
 
     }
 
+    // REQUIRES: radius must be positive
+    // EFFECT: calculates planet mass based off of radius and therefore based
+    //         on whether it is rocky or gaseous
+    private double calculateMass(boolean isRocky, double radius) {
+        double mass;
+
+        if (isRocky) {
+            mass = 1.33 * 3.14 * RHO_ROCKY * Math.pow(radius, 3);
+        } else {
+            mass = 1.33 * 3.14 * RHO_GAS * Math.pow(radius, 3);
+        }
+        return mass;
+    }
+
     public double getOrbitSize() {
         return orbitSize;
     }
@@ -49,15 +65,6 @@ public class Planet extends Body {
         return rocky;
     }
 
-    private double calculateMass(boolean isRocky, double radius) {
-        double mass;
 
-        if (isRocky) {
-            mass = 1.33 * 3.14 * RHO_ROCKY * Math.pow(radius, 3);
-        } else {
-            mass = 1.33 * 3.14 * RHO_GAS * Math.pow(radius, 3);
-        }
-        return mass;
-    }
 
 }

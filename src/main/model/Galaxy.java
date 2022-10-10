@@ -4,12 +4,13 @@ import exceptions.NameAlreadyUsed;
 
 import java.util.HashMap;
 
+// Class to represent a galaxy with SolarSystems and a name
 public class Galaxy {
     private String name;
     private HashMap<String, SolarSystem> solarSystems;
     private int solarSystemCount;
 
-    // EFFECT: construct a galaxy with no solar systems
+    // EFFECT: construct a galaxy with no solar systems and a given name
     public Galaxy(String name) {
         this.name = name;
         solarSystemCount = 0;
@@ -18,6 +19,7 @@ public class Galaxy {
 
     // MODIFIES: this
     // EFFECT: adds a solar system to the galaxy
+    //         check's if name has already been used and throws an error if it has
     public void addSolarSystem(SolarSystem solarSystem) throws NameAlreadyUsed {
         String solarSystemName = solarSystem.getName();
         
@@ -35,7 +37,6 @@ public class Galaxy {
     public void removeSolarSystem(String solarSystemName) {
         solarSystems.remove(solarSystemName);
         solarSystemCount = solarSystemCount - 1;
-
     }
 
     // MODIFIES: this
@@ -44,10 +45,10 @@ public class Galaxy {
         this.name = newName;
     }
 
+    // EFFECT: return a solar system based on it's name
     public SolarSystem getSolarSystem(String solarSystemName) {
         return solarSystems.get(solarSystemName);
     }
-
 
     public HashMap<String, SolarSystem> getSolarSystems() {
         return solarSystems;

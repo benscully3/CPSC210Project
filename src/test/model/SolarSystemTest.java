@@ -64,6 +64,7 @@ public class SolarSystemTest {
 
     }
 
+    // Tests adding planets that collide
     @Test
     public void addPlanetTestMultipleCollide() {
         assertFalse(solarSystem.addPlanet(planet1));
@@ -85,6 +86,7 @@ public class SolarSystemTest {
         assertEquals(newPlanet.getOrbitSize(), comparePlanet.getOrbitSize());
     }
 
+    // Edge case for no collision
     @Test
     public void addPlanetTestMultipleJustNoCollide() {
         assertFalse(solarSystem.addPlanet(planet1));

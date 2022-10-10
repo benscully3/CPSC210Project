@@ -12,6 +12,7 @@ public class PlanetTest {
     private static final double RHO_GAS = 0.04; // gas planet density
     private static final double RHO_ROCKY = 0.18; // rocky planet density
 
+
     @BeforeEach
     public void runBefore() {
         rockyPlanet = new Planet("Rocky Planet");
@@ -19,6 +20,7 @@ public class PlanetTest {
         planetWithMoon = new Planet("Planet with moon", 2, 2, true);
     }
 
+    // Tests different types of planets
     @Test
     public void constructorTest() {
         assertEquals(10, gasPlanet.getRadius());
@@ -44,6 +46,7 @@ public class PlanetTest {
 
     }
 
+    // helper function for constructor tests
     private double calculateMass(boolean isRocky, double radius) {
         double mass;
 

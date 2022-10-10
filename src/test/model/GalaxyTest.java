@@ -71,6 +71,7 @@ public class GalaxyTest {
         assertEquals(solarSystems, galaxy.getSolarSystems());
     }
 
+    // Tests error throwing
     @Test
     public void addSolarSystemTestMultipleNameUsed() throws NameAlreadyUsed {
         galaxy = new Galaxy("Galaxy");

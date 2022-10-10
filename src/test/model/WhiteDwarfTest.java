@@ -25,6 +25,7 @@ public class WhiteDwarfTest {
         assertTrue(whiteDwarf.canSupernova());
     }
 
+    // Edge case
     @Test
     public void canSupernovaTestJustYes() {
         whiteDwarf = new WhiteDwarf("white dwarf", 1.41);
@@ -37,6 +38,7 @@ public class WhiteDwarfTest {
         assertFalse(whiteDwarf.canSupernova());
     }
 
+    // Edge Case
     @Test
     public void canSupernovaTestJustNo() {
         whiteDwarf = new WhiteDwarf("white dwarf", 1.4);

@@ -1,8 +1,6 @@
 package ui;
 
-import exceptions.BadCommand;
-import exceptions.NotPositiveNumber;
-import exceptions.NameAlreadyUsed;
+import exceptions.*;
 import model.*;
 
 import java.util.HashMap;

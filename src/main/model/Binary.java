@@ -5,7 +5,7 @@ public class Binary extends CentralBody {
     private CentralBody centralBody2;  // Cannot be another binary
 
     // REQUIRES: Central body parameters cannot be binaries
-    // EFFECT:
+    // EFFECT: Create a binary consisting of two CentralBodies with a given name
     public Binary(String name, CentralBody centralBody1, CentralBody centralBody2) {
         this.centralBody1 = centralBody1;
         this.centralBody2 = centralBody2;
@@ -15,6 +15,7 @@ public class Binary extends CentralBody {
         this.centralBodyType = "Binary";
     }
 
+    // EFFECT: Returns false because binaries cannot go supernova (in this program)
     public boolean canSupernova() {
         return false;
     }
