@@ -498,15 +498,20 @@ public class GalaxyBuilderApp {
         String mass = String.format("%.2f", centralBody.getMass());
         String radius = String.format("%.2f", centralBody.getRadius());
         String centralBodyType = centralBody.getCentralBodyType();
-        print("\n CENTRAL BODY:");
-        print("\nName: " + name + " - " + centralBodyType);
+        print("\n CENTRAL BODY:" + "\nName: " + name + " - " + centralBodyType);
+        if (centralBodyType.equals("Binary")) {
+            Binary castedBody = (Binary) centralBody;
+            print("\t Composed of a " + castedBody.getCentralBody1().getCentralBodyType()
+                    + " and a " + castedBody.getCentralBody2().getCentralBodyType());
+        }
         print("\tMass: " + mass + " Solar masses");
         if (centralBodyType.equals("Giant Star")) {
             print("\tRadius: " + radius + " Solar radii");
+        } else if (centralBodyType.equals("Binary")) {
+            ;
         } else {
             print("\tRadius: " + radius + " kilometers");
         }
-
         if (centralBodyType.equals("Giant Star")) {
             GiantStar giantStar = (GiantStar) centralBody;
             String luminosity = String.format("%.2f", giantStar.getLuminosity());
