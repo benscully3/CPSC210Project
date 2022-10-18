@@ -41,3 +41,5 @@ a solar system.
 - As a user, I want to be able to remove planets from a solar system
 - As a user, I want to be able to make a star go supernova
 - As a user, I want to be able to see my solar systems
+- As a user, I want to be able to save the galaxy I build
+- As a user, I want to be able to load the galaxy I have saved

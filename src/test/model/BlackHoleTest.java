@@ -2,7 +2,10 @@ package model;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.util.ArrayList;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 public class BlackHoleTest {
     private BlackHole blackHole;
@@ -22,6 +25,9 @@ public class BlackHoleTest {
     public void canSupernovaTest() {
         blackHole = new BlackHole("black hole", 100);
         assertFalse(blackHole.canSupernova());
+
+        ArrayList<String> list = new ArrayList<String>();
+        list.isEmpty();
     }
 
 }
