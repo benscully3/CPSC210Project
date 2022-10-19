@@ -142,8 +142,8 @@ public class GalaxyBuilderApp {
         SolarSystem solarSystem;
         boolean keepGoing = true;
 
-        displayCentralBodies(false);
-        centralBody = processCentralBodyCommand(false);
+        displayCentralBodies(true);
+        centralBody = processCentralBodyCommand(true);
 
         while (keepGoing) {
             try {

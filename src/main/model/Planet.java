@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 //  class to represent a planet with orbit size, moon, and type (rocky, or gas)
 public class Planet extends Body {
     private double orbitSize;
@@ -39,6 +41,19 @@ public class Planet extends Body {
 
     }
 
+    // REQUIRES: radius and orbitSize must be positive
+    // EFFECT: create a gas or rocky planet with all given data, only used when creating planets
+    //         from a saved file.
+    public Planet(String name, double radius, double mass, double orbitSize, boolean isMoon, boolean isRocky) {
+        this.name = name;
+        this.radius = radius;
+        this.mass = mass;
+        this.orbitSize = orbitSize;
+        this.moon = isMoon;
+        this.rocky = isRocky;
+    }
+
+
     // REQUIRES: radius must be positive
     // EFFECT: calculates planet mass based off of radius and therefore based
     //         on whether it is rocky or gaseous
@@ -53,6 +68,18 @@ public class Planet extends Body {
         return mass;
     }
 
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("mass", mass);
+        json.put("radius", radius);
+        json.put("orbitSize", orbitSize);
+        json.put("rocky", rocky);
+        json.put("moon", moon);
+
+        return json;
+    }
+
     // getters
     public double getOrbitSize() {
         return orbitSize;
@@ -65,7 +92,6 @@ public class Planet extends Body {
     public boolean isRocky() {
         return rocky;
     }
-
 
 
 }

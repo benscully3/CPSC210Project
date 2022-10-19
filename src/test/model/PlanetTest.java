@@ -46,6 +46,17 @@ public class PlanetTest {
 
     }
 
+    @Test
+    public void constructorTestSavedPlanet() {
+        Planet planetSaved = new Planet("planet", 4, 3, 5, true, true);
+        assertEquals(4, planetSaved.getRadius());
+        assertEquals(3, planetSaved.getMass());
+        assertEquals("planet", planetSaved.getName());
+        assertEquals(5, planetSaved.getOrbitSize());
+        assertTrue(planetSaved.isMoon());
+        assertTrue(planetSaved.isRocky());
+    }
+
     // helper function for constructor tests
     private double calculateMass(boolean isRocky, double radius) {
         double mass;

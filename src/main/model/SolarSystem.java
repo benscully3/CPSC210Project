@@ -1,9 +1,13 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.HashMap;
 
 // class to represent a solar system with Planets, a central body and a name
-public class SolarSystem extends Body {
+public class SolarSystem extends Body implements Writable {
     private CentralBody centralBody;
     private HashMap<String, Planet> planets;  // planet list, key is planet name
     private int planetCount;
@@ -71,6 +75,34 @@ public class SolarSystem extends Body {
         return planets.get(planetName);
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("centralBody", centralBodyToJson());
+        json.put("planets", planetsToJson());
+        return json;
+    }
+
+    private JSONArray planetsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Planet p : planets.values()) {
+            jsonArray.put(p.toJson());
+        }
+
+        return jsonArray;
+    }
+
+    private JSONObject centralBodyToJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", centralBody.getName());
+        json.put("centralBodyType", centralBody.getCentralBodyType());
+        json.put("mass", centralBody.getMass());
+        json.put("radius", centralBody.getRadius());
+        return json;
+    }
+
     // getters
     public HashMap<String, Planet> getPlanets() {
         return planets;
@@ -83,6 +115,5 @@ public class SolarSystem extends Body {
     public int getPlanetCount() {
         return planetCount;
     }
-
 
 }

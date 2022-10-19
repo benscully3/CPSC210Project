@@ -1,11 +1,14 @@
 package model;
 
 import exceptions.NameAlreadyUsed;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
 
 import java.util.HashMap;
 
 // Class to represent a galaxy with SolarSystems and a name
-public class Galaxy {
+public class Galaxy implements Writable {
     private String name;
     private HashMap<String, SolarSystem> solarSystems;
     private int solarSystemCount;
@@ -48,6 +51,27 @@ public class Galaxy {
     // EFFECT: return a solar system based on it's name
     public SolarSystem getSolarSystem(String solarSystemName) {
         return solarSystems.get(solarSystemName);
+    }
+
+    // EFFECT: write galaxy data to a JSON object
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("solarSystemCount", solarSystemCount);
+        json.put("solarSystems", solarSystemsToJson());
+        return json;
+    }
+
+    // EFFECT
+    private JSONArray solarSystemsToJson() {
+        JSONArray jsonArray = new JSONArray();
+
+        for (SolarSystem s : solarSystems.values()) {
+            jsonArray.put(s.toJson());
+        }
+
+        return jsonArray;
     }
 
     // getters
