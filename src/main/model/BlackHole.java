@@ -12,6 +12,15 @@ public class BlackHole extends CentralBody {
         this.centralBodyType = "Black Hole";
     }
 
+    // EFFECT: constructs black hole with all data given
+    //         used to build from saved file
+    public BlackHole(String name, String centralBodyType, double mass, double radius) {
+        this.mass = mass;
+        this.radius = radius;
+        this.name = name;
+        this.centralBodyType = centralBodyType;
+    }
+
     // EFFECT: returns false because black holes cannot go supernova
     public boolean canSupernova() {
         return false;

@@ -1,9 +1,10 @@
 package model;
 
 import org.json.JSONObject;
+import persistence.Writable;
 
 //  class to represent a planet with orbit size, moon, and type (rocky, or gas)
-public class Planet extends Body {
+public class Planet extends Body implements Writable {
     private double orbitSize;
     private boolean moon; // does the planet have one moon
     private boolean rocky; // if false: gas giant
@@ -68,6 +69,7 @@ public class Planet extends Body {
         return mass;
     }
 
+    @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("name", name);

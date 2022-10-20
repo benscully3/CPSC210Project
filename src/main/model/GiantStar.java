@@ -15,7 +15,16 @@ public class GiantStar extends Star {
                 / (4.0 * 3.14 * STEPHAN_BOLTZMANN * Math.pow(TEMPERATURE, 4)));
         this.name = name;
         this.centralBodyType = "Giant Star";
+    }
 
+    // EFFECT: constructs giant star with all data given
+    //         used to build from saved file
+    public GiantStar(String name, String centralBodyType, double mass, double radius, double luminosity) {
+        this.mass = mass;
+        this.radius = radius;
+        this.name = name;
+        this.centralBodyType = centralBodyType;
+        this.luminosity = luminosity;
     }
 
     // EFFECT: returns true because giant stars can go supernova

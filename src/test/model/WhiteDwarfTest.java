@@ -20,6 +20,15 @@ public class WhiteDwarfTest {
     }
 
     @Test
+    public void constructorTestAlternative() {
+        whiteDwarf = new WhiteDwarf("white dwarf", "White Dwarf", 0.8, 14);
+        assertEquals(0.8, whiteDwarf.getMass());
+        assertEquals(14, whiteDwarf.getRadius());
+        assertEquals("white dwarf", whiteDwarf.getName());
+        assertEquals("White Dwarf", whiteDwarf.getCentralBodyType());
+    }
+
+    @Test
     public void canSupernovaTestYes() {
         whiteDwarf = new WhiteDwarf("white dwarf", 1.6);
         assertTrue(whiteDwarf.canSupernova());

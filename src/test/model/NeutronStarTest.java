@@ -24,6 +24,16 @@ public class NeutronStarTest {
     }
 
     @Test
+    public void neutronStarTestAlternative() {
+        NeutronStar neutronStarAlt = new NeutronStar("neutron star", "Neutron Star",
+                2.1, 10000);
+        assertEquals(2.1, neutronStarAlt.getMass());
+        assertEquals(10000, neutronStarAlt.getRadius());
+        assertEquals("Neutron Star", neutronStarAlt.getCentralBodyType());
+        assertEquals("neutron star", neutronStarAlt.getName());
+    }
+
+    @Test
     public void canSupernovaTest() {
         assertFalse(neutronStar.canSupernova());
     }

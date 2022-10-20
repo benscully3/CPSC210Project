@@ -22,6 +22,15 @@ public class BlackHoleTest {
     }
 
     @Test
+    public void constructorTestAlternative() {
+        blackHole = new BlackHole("black hole","Black Hole", 10, 26 );
+        assertEquals(10, blackHole.getMass());
+        assertEquals(26, blackHole.getRadius());
+        assertEquals("black hole", blackHole.getName());
+        assertEquals("Black Hole", blackHole.getCentralBodyType());
+    }
+
+    @Test
     public void canSupernovaTest() {
         blackHole = new BlackHole("black hole", 100);
         assertFalse(blackHole.canSupernova());

@@ -1,10 +1,7 @@
 package persistence;
 
 import exceptions.NameAlreadyUsed;
-import model.CentralBody;
-import model.Galaxy;
-import model.Planet;
-import model.SolarSystem;
+import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -53,7 +50,7 @@ public class JsonReader {
     // MODIFIES: galaxy
     // EFFECTS: parses solar systems from JSON object and adds them to galaxy
     private void addSolarSystems(Galaxy galaxy, JSONObject jsonObject) {
-        JSONArray jsonArray = jsonObject.getJSONArray("thingies");
+        JSONArray jsonArray = jsonObject.getJSONArray("solarSystems");
         for (Object json : jsonArray) {
             JSONObject nextSolarSystem = (JSONObject) json;
             addSolarSystem(galaxy, nextSolarSystem);
@@ -62,12 +59,11 @@ public class JsonReader {
 
     // MODIFIES: galaxy
     // EFFECTS: parses solar system from JSON object and adds it to galaxy
-    private void addSolarSystem(Galaxy galaxy, JSONObject jsonObject) {
-        String name = jsonObject.getString("name");
-        CentralBody centralBody = galaxy.getSolarSystem(jsonObject.getString("category")).getCentralBody();
+    private void addSolarSystem(Galaxy galaxy, JSONObject jsonSolarSystem) {
+        String name = jsonSolarSystem.getString("name");
+        CentralBody centralBody = readCentralBody(jsonSolarSystem.getJSONObject("centralBody"));
         SolarSystem solarSystem = new SolarSystem(name, centralBody);
-        addPlanets(solarSystem, jsonObject);
-        // TODO: add planets to solar system
+        addPlanets(solarSystem, jsonSolarSystem);
         try {
             galaxy.addSolarSystem(solarSystem);
         } catch (NameAlreadyUsed e) {
@@ -75,11 +71,35 @@ public class JsonReader {
         }
     }
 
+    // EFFECT: reads and rebuilds central body
+    private CentralBody readCentralBody(JSONObject jsonCentralBody) {
+        String name = jsonCentralBody.getString("name");
+        String centralBodyType = jsonCentralBody.getString("centralBodyType");
+        double radius = jsonCentralBody.getDouble("radius");
+        double mass = jsonCentralBody.getDouble("mass");
+
+        if (centralBodyType.equals("Black Hole")) {
+            BlackHole blackHole = new BlackHole(name, centralBodyType, mass, radius);
+            return blackHole;
+        } else if (centralBodyType.equals("Neutron Star")) {
+            NeutronStar neutronStar = new NeutronStar(name, centralBodyType, mass, radius);
+            return neutronStar;
+        } else if (centralBodyType.equals("Giant Star")) {
+            double luminosity = jsonCentralBody.getDouble("luminosity");
+            GiantStar giantStar = new GiantStar(name, centralBodyType, mass, radius, luminosity);
+            return giantStar;
+        } else if (centralBodyType.equals("White Dwarf")) {
+            WhiteDwarf whiteDwarf = new WhiteDwarf(name, centralBodyType, mass, radius);
+            return whiteDwarf;
+        }
+        return null;
+    }
+
     // MODIFIES: solarSystem
     // EFFECTS: parses planets from JSON object and adds it to solar systems
-    private void addPlanets(SolarSystem solarSystem, JSONObject jsonObject) {
-        JSONArray jsonArray = jsonObject.getJSONArray("planets");
-        for (Object json : jsonArray) {
+    private void addPlanets(SolarSystem solarSystem, JSONObject jsonSolarSystem) {
+        JSONArray jsonPlanets = jsonSolarSystem.getJSONArray("planets");
+        for (Object json : jsonPlanets) {
             JSONObject nextPlanet = (JSONObject) json;
             addPlanet(solarSystem, nextPlanet);
         }
@@ -88,13 +108,13 @@ public class JsonReader {
 
     // MODIFIES: solarSystem
     // EFFECTS: parses planet from JSON object and adds it to solar system
-    private void addPlanet(SolarSystem solarSystem, JSONObject jsonObject) {
-        String name = jsonObject.getString("name");
-        double mass = jsonObject.getDouble("mass");
-        double radius = jsonObject.getDouble("radius");
-        double orbitSize = jsonObject.getDouble("orbitSize");
-        boolean moon = jsonObject.getBoolean("moon");
-        boolean rocky = jsonObject.getBoolean("rocky");
+    private void addPlanet(SolarSystem solarSystem, JSONObject jsonPlanet) {
+        String name = jsonPlanet.getString("name");
+        double mass = jsonPlanet.getDouble("mass");
+        double radius = jsonPlanet.getDouble("radius");
+        double orbitSize = jsonPlanet.getDouble("orbitSize");
+        boolean moon = jsonPlanet.getBoolean("moon");
+        boolean rocky = jsonPlanet.getBoolean("rocky");
 
         Planet planet = new Planet(name, radius, mass, orbitSize, moon, rocky);
         solarSystem.addPlanet(planet);

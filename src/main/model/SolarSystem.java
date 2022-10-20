@@ -100,6 +100,10 @@ public class SolarSystem extends Body implements Writable {
         json.put("centralBodyType", centralBody.getCentralBodyType());
         json.put("mass", centralBody.getMass());
         json.put("radius", centralBody.getRadius());
+        if (centralBody.getCentralBodyType().equals("Giant Star")) {
+            GiantStar giantStar = (GiantStar) centralBody;
+            json.put("luminosity", giantStar.getLuminosity());
+        }
         return json;
     }
 

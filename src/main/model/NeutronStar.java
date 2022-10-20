@@ -12,6 +12,15 @@ public class NeutronStar extends Star {
         this.name = name;
     }
 
+    // EFFECT: constructs neutron star with all data given
+    //         used to build from saved file
+    public NeutronStar(String name, String centralBodyType, double mass, double radius) {
+        this.mass = mass;
+        this.radius = radius;
+        this.name = name;
+        this.centralBodyType = centralBodyType;
+    }
+
     // EFFECT: returns false because neutron stars cannot go supernova
     public boolean canSupernova() {
         return false;

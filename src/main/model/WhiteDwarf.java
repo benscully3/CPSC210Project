@@ -12,6 +12,15 @@ public class WhiteDwarf extends Star {
         this.centralBodyType = "White Dwarf";
     }
 
+    // EFFECT: constructs white dwarf with all data given
+    //         used to build from saved file
+    public WhiteDwarf(String name, String centralBodyType, double mass, double radius) {
+        this.mass = mass;
+        this.radius = radius;
+        this.name = name;
+        this.centralBodyType = centralBodyType;
+    }
+
     // REQUIRES: must be in a binary
     // EFFECT: star explodes destroying solar system
     //         implementation for conditions when a white dwarf could
