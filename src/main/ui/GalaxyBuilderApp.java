@@ -112,6 +112,8 @@ public class GalaxyBuilderApp {
         }
     }
 
+    // MODIFIES: galaxy
+    // EFFECT: change the name of the galaxy
     private void changeGalaxyName() {
         print("\n Enter new galaxy name:");
         String newName = input.next();
@@ -119,6 +121,8 @@ public class GalaxyBuilderApp {
         print("Changed galaxy name to " + newName);
     }
 
+    // MODIFIES: galaxy
+    // EFFECT: loads the galaxy saved to JSON_STORE into the galaxy field
     private void loadGalaxy() {
         try {
             galaxy = jsonReader.read();
@@ -128,6 +132,7 @@ public class GalaxyBuilderApp {
         }
     }
 
+    // EFFECT: saves the current galaxy to JSON_STORE
     private void saveGalaxy() {
         try {
             jsonWriter.open();
