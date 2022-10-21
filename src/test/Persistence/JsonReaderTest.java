@@ -29,7 +29,7 @@ public class JsonReaderTest extends JsonTest {
 
     @Test
     public void testReaderEmptyGalaxy() {
-        JsonReader reader = new JsonReader("./PersonalProject/data/testReaderEmptyGalaxy.json");
+        JsonReader reader = new JsonReader("./data/testReaderEmptyGalaxy.json");
         try {
             Galaxy galaxy = reader.read();
             assertEquals("galaxy", galaxy.getName());
@@ -49,7 +49,7 @@ public class JsonReaderTest extends JsonTest {
         for (SolarSystem s : galaxy.getSolarSystems().values()) {
             solarSystems.add(s);
         }
-        JsonReader reader = new JsonReader("./PersonalProject/data/testReaderGeneralGalaxy.json");
+        JsonReader reader = new JsonReader("./data/testReaderGeneralGalaxy.json");
         try {
             Galaxy galaxyRead = reader.read();
 

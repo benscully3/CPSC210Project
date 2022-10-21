@@ -31,12 +31,12 @@ public class JsonWriterTest extends JsonTest {
     void testWriterEmptyGalaxy() {
         try {
             Galaxy galaxy = new Galaxy("galaxy");
-            JsonWriter writer = new JsonWriter("./PersonalProject/data/testWriterEmptyGalaxy.json");
+            JsonWriter writer = new JsonWriter("./data/testWriterEmptyGalaxy.json");
             writer.open();
             writer.write(galaxy);
             writer.close();
 
-            JsonReader reader = new JsonReader("./PersonalProject/data/testWriterEmptyGalaxy.json");
+            JsonReader reader = new JsonReader("./data/testWriterEmptyGalaxy.json");
             galaxy = reader.read();
             assertEquals("galaxy", galaxy.getName());
             assertEquals(0, galaxy.getSolarSystemCount());
@@ -56,12 +56,12 @@ public class JsonWriterTest extends JsonTest {
                 solarSystems.add(s);
             }
 
-            JsonWriter writer = new JsonWriter("./PersonalProject/data/testWriterGeneralGalaxy.json");
+            JsonWriter writer = new JsonWriter("./data/testWriterGeneralGalaxy.json");
             writer.open();
             writer.write(galaxy);
             writer.close();
 
-            JsonReader reader = new JsonReader("./PersonalProject/data/testWriterGeneralGalaxy.json");
+            JsonReader reader = new JsonReader("./data/testWriterGeneralGalaxy.json");
             Galaxy galaxyRead = reader.read();
 
             assertEquals("galaxy", galaxyRead.getName());
