@@ -88,11 +88,10 @@ public class JsonReader {
             double luminosity = jsonCentralBody.getDouble("luminosity");
             GiantStar giantStar = new GiantStar(name, centralBodyType, mass, radius, luminosity);
             return giantStar;
-        } else if (centralBodyType.equals("White Dwarf")) {
+        } else {
             WhiteDwarf whiteDwarf = new WhiteDwarf(name, centralBodyType, mass, radius);
             return whiteDwarf;
         }
-        return null;
     }
 
     // MODIFIES: solarSystem

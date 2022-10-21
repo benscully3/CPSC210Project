@@ -1,9 +1,6 @@
 package Persistence;
 
-import model.CentralBody;
-import model.Galaxy;
-import model.Planet;
-import model.SolarSystem;
+import model.*;
 import org.junit.jupiter.api.Test;
 import persistence.JsonReader;
 
@@ -69,4 +66,16 @@ public class JsonReaderTest extends JsonTest {
         }
     }
 
+    @Test
+    public void testReaderDuplicateName() {
+        JsonReader reader = new JsonReader("./data/testReaderDuplicateNames.json");
+        try {
+            Galaxy galaxyRead = reader.read();
+            fail("Should've thrown");
+        } catch (RuntimeException e) {
+            System.out.println("Expected Runtime error");
+        } catch (Exception e) {
+            fail("Shouldn't have thrown here");
+        }
+    }
 }

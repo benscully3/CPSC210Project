@@ -1,0 +1,64 @@
+{
+  "solarSystems": [
+    {
+      "planets": [
+        {
+          "orbitSize": 3,
+          "moon": false,
+          "mass": 7,
+          "name": "planet2",
+          "radius": 4,
+          "rocky": true
+        },
+        {
+          "orbitSize": 4,
+          "moon": true,
+          "mass": 13,
+          "name": "planet1",
+          "radius": 10,
+          "rocky": false
+        }
+      ],
+      "name": "solar System1",
+      "centralBody": {
+        "centralBodyType": "Black Hole",
+        "mass": 10,
+        "name": "black hole",
+        "radius": 30
+      }
+    },
+    {
+      "planets": [],
+      "name": "solar System1",
+      "centralBody": {
+        "centralBodyType": "Giant Star",
+        "mass": 10,
+        "name": "giant star",
+        "luminosity": 25,
+        "radius": 45
+      }
+    },
+    {
+      "planets": [],
+      "name": "solar System1",
+      "centralBody": {
+        "centralBodyType": "White Dwarf",
+        "mass": 1.1,
+        "name": "white dwarf",
+        "radius": 10
+      }
+    },
+    {
+      "planets": [],
+      "name": "solar System1",
+      "centralBody": {
+        "centralBodyType": "Neutron Star",
+        "mass": 2,
+        "name": "neutron star",
+        "radius": 15000
+      }
+    }
+  ],
+  "solarSystemCount": 4,
+  "name": "galaxy"
+}
