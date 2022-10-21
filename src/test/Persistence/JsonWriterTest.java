@@ -1,7 +1,9 @@
 package Persistence;
 
-import exceptions.NameAlreadyUsed;
-import model.*;
+import model.CentralBody;
+import model.Galaxy;
+import model.Planet;
+import model.SolarSystem;
 import org.junit.jupiter.api.Test;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -28,7 +30,7 @@ public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterEmptyGalaxy() {
         try {
-            Galaxy galaxy = new Galaxy("Galaxy");
+            Galaxy galaxy = new Galaxy("galaxy");
             JsonWriter writer = new JsonWriter("./PersonalProject/data/testWriterEmptyGalaxy.json");
             writer.open();
             writer.write(galaxy);
@@ -36,7 +38,7 @@ public class JsonWriterTest extends JsonTest{
 
             JsonReader reader = new JsonReader("./PersonalProject/data/testWriterEmptyGalaxy.json");
             galaxy = reader.read();
-            assertEquals("Galaxy", galaxy.getName());
+            assertEquals("galaxy", galaxy.getName());
             assertEquals(0, galaxy.getSolarSystemCount());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
@@ -79,22 +81,22 @@ public class JsonWriterTest extends JsonTest{
         }
     }
 
-    // helper function to build a galaxy to test json
-    private void buildGalaxy(Galaxy galaxy) {
-        BlackHole blackHole = new BlackHole("black hole", "Black Hole", 10, 30);
-        NeutronStar neutronStar = new NeutronStar("neutron star", "Neutron Star", 2, 15000);
-        WhiteDwarf whiteDwarf = new WhiteDwarf("white dwarf", "White Dwarf", 1.1, 10);
-        GiantStar giantStar = new GiantStar("giant star", "Giant Star", 10, 45, 25);
-        try {
-            galaxy.addSolarSystem(new SolarSystem("solar System1", blackHole));
-            galaxy.addSolarSystem(new SolarSystem("solar System2", neutronStar));
-            galaxy.addSolarSystem(new SolarSystem("solar System3", whiteDwarf));
-            galaxy.addSolarSystem(new SolarSystem("solar System4", giantStar));
-        } catch (NameAlreadyUsed e) {
-            throw new RuntimeException(e);
-        }
-        SolarSystem solarSystem = galaxy.getSolarSystem("solar System1");
-        solarSystem.addPlanet(new Planet("planet1", 10, 13,  4, true, false));
-        solarSystem.addPlanet(new Planet("planet2", 4, 7, 3, false, true));
-    }
+//    // helper function to build a galaxy to test json
+//    private void buildGalaxy(Galaxy galaxy) {
+//        BlackHole blackHole = new BlackHole("black hole", "Black Hole", 10, 30);
+//        NeutronStar neutronStar = new NeutronStar("neutron star", "Neutron Star", 2, 15000);
+//        WhiteDwarf whiteDwarf = new WhiteDwarf("white dwarf", "White Dwarf", 1.1, 10);
+//        GiantStar giantStar = new GiantStar("giant star", "Giant Star", 10, 45, 25);
+//        try {
+//            galaxy.addSolarSystem(new SolarSystem("solar System1", blackHole));
+//            galaxy.addSolarSystem(new SolarSystem("solar System2", neutronStar));
+//            galaxy.addSolarSystem(new SolarSystem("solar System3", whiteDwarf));
+//            galaxy.addSolarSystem(new SolarSystem("solar System4", giantStar));
+//        } catch (NameAlreadyUsed e) {
+//            throw new RuntimeException(e);
+//        }
+//        SolarSystem solarSystem = galaxy.getSolarSystem("solar System1");
+//        solarSystem.addPlanet(new Planet("planet1", 10, 13,  4, true, false));
+//        solarSystem.addPlanet(new Planet("planet2", 4, 7, 3, false, true));
+//    }
 }

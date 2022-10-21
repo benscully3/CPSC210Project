@@ -1,8 +1,7 @@
 package Persistence;
 
-import model.CentralBody;
-import model.Planet;
-import model.SolarSystem;
+import exceptions.NameAlreadyUsed;
+import model.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,5 +43,24 @@ public class JsonTest {
         assertEquals(expectedCentralBody.getMass(), centralBody.getMass());
         assertEquals(expectedCentralBody.getName(), centralBody.getName());
         assertEquals(expectedCentralBody.getRadius(), centralBody.getRadius());
+    }
+
+    // helper function to build a galaxy to test json
+    protected void buildGalaxy(Galaxy galaxy) {
+        BlackHole blackHole = new BlackHole("black hole", "Black Hole", 10, 30);
+        NeutronStar neutronStar = new NeutronStar("neutron star", "Neutron Star", 2, 15000);
+        WhiteDwarf whiteDwarf = new WhiteDwarf("white dwarf", "White Dwarf", 1.1, 10);
+        GiantStar giantStar = new GiantStar("giant star", "Giant Star", 10, 45, 25);
+        try {
+            galaxy.addSolarSystem(new SolarSystem("solar System1", blackHole));
+            galaxy.addSolarSystem(new SolarSystem("solar System2", neutronStar));
+            galaxy.addSolarSystem(new SolarSystem("solar System3", whiteDwarf));
+            galaxy.addSolarSystem(new SolarSystem("solar System4", giantStar));
+        } catch (NameAlreadyUsed e) {
+            throw new RuntimeException(e);
+        }
+        SolarSystem solarSystem = galaxy.getSolarSystem("solar System1");
+        solarSystem.addPlanet(new Planet("planet1", 10, 13,  4, true, false));
+        solarSystem.addPlanet(new Planet("planet2", 4, 7, 3, false, true));
     }
 }
