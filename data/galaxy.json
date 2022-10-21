@@ -1,21 +1,5 @@
 {
-    "solarSystems": [{
-        "planets": [{
-            "orbitSize": 1,
-            "moon": true,
-            "mass": 0.751716,
-            "name": "earth",
-            "radius": 1,
-            "rocky": true
-        }],
-        "name": "dawg",
-        "centralBody": {
-            "centralBodyType": "Black Hole",
-            "mass": 200,
-            "name": "m87",
-            "radius": 590
-        }
-    }],
-    "solarSystemCount": 1,
-    "name": "andromeda"
+    "solarSystems": [],
+    "solarSystemCount": 0,
+    "name": "a"
 }

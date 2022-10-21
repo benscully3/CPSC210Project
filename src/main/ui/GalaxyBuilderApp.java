@@ -17,7 +17,7 @@ import static java.lang.Double.parseDouble;
 
 // Galaxy builder application
 public class GalaxyBuilderApp {
-    private static final String JSON_STORE = "./PersonalProject/data/galaxy.json";
+    private static final String JSON_STORE = "./data/galaxy.json";
     private Galaxy galaxy;
     private Scanner input;
     private JsonWriter jsonWriter;
