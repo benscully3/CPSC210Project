@@ -14,7 +14,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
-public class JsonReaderTest extends JsonTest{
+public class JsonReaderTest extends JsonTest {
 
     @Test
     public void testReaderNonExistentFile() {
@@ -38,7 +38,6 @@ public class JsonReaderTest extends JsonTest{
             fail("Couldn't read from file");
         }
     }
-
 
 
     @Test

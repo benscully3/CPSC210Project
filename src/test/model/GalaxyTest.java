@@ -135,6 +135,4 @@ public class GalaxyTest {
         galaxy.changeName("New name");
         assertEquals("New name", galaxy.getName());
     }
-
-
 }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JsonTest {
-    protected void checkSolarSystem(String name, CentralBody centralBody, HashMap<String, Planet> planets, SolarSystem solarSystem) {
+    public static void checkSolarSystem(String name, CentralBody centralBody, HashMap<String, Planet> planets, SolarSystem solarSystem) {
         ArrayList<Planet> expectedPlanetsValues = new ArrayList<Planet>();
         ArrayList<Planet> planetsValues = new ArrayList<Planet>();
         assertEquals(name, solarSystem.getName());
@@ -24,13 +24,13 @@ public class JsonTest {
         checkPlanets(expectedPlanetsValues, planetsValues);
     }
 
-    private void checkPlanets(ArrayList<Planet> expectedPlanets, ArrayList<Planet> planets) {
-        for (int i=0; i<planets.size(); i++) {
+    private static void checkPlanets(ArrayList<Planet> expectedPlanets, ArrayList<Planet> planets) {
+        for (int i = 0; i < planets.size(); i++) {
             checkPlanet(expectedPlanets.get(i), planets.get(i));
         }
     }
 
-    private void checkPlanet(Planet expectedPlanet, Planet planet) {
+    private static void checkPlanet(Planet expectedPlanet, Planet planet) {
         assertEquals(expectedPlanet.getName(), planet.getName());
         assertEquals(expectedPlanet.getOrbitSize(), planet.getOrbitSize());
         assertEquals(expectedPlanet.getMass(), planet.getMass());
@@ -38,7 +38,7 @@ public class JsonTest {
         assertEquals(expectedPlanet.isRocky(), planet.isRocky());
     }
 
-    private void checkCentralBody(CentralBody expectedCentralBody, CentralBody centralBody) {
+    private static void checkCentralBody(CentralBody expectedCentralBody, CentralBody centralBody) {
         assertEquals(expectedCentralBody.getCentralBodyType(), centralBody.getCentralBodyType());
         assertEquals(expectedCentralBody.getMass(), centralBody.getMass());
         assertEquals(expectedCentralBody.getName(), centralBody.getName());
@@ -60,7 +60,7 @@ public class JsonTest {
             throw new RuntimeException(e);
         }
         SolarSystem solarSystem = galaxy.getSolarSystem("solar System1");
-        solarSystem.addPlanet(new Planet("planet1", 10, 13,  4, true, false));
+        solarSystem.addPlanet(new Planet("planet1", 10, 13, 4, true, false));
         solarSystem.addPlanet(new Planet("planet2", 4, 7, 3, false, true));
     }
 }

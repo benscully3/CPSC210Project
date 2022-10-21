@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -55,6 +56,17 @@ public class PlanetTest {
         assertEquals(5, planetSaved.getOrbitSize());
         assertTrue(planetSaved.isMoon());
         assertTrue(planetSaved.isRocky());
+    }
+
+    @Test
+    public void toJsonTest () {
+        JSONObject jsonPlanet = rockyPlanet.toJson();
+        assertEquals(rockyPlanet.getName(), jsonPlanet.getString("name"));
+        assertEquals(rockyPlanet.getMass(), jsonPlanet.getDouble("mass"));
+        assertEquals(rockyPlanet.getRadius(), jsonPlanet.getDouble("radius"));
+        assertEquals(rockyPlanet.getOrbitSize(), jsonPlanet.getDouble("orbitSize"));
+        assertEquals(rockyPlanet.isRocky(), jsonPlanet.getBoolean("rocky"));
+        assertEquals(rockyPlanet.isMoon(), jsonPlanet.getBoolean("moon"));
     }
 
     // helper function for constructor tests
