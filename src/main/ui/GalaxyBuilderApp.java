@@ -4,7 +4,11 @@ import exceptions.BadCommand;
 import exceptions.NameAlreadyUsed;
 import exceptions.NotPositiveNumber;
 import model.*;
+import persistence.JsonReader;
+import persistence.JsonWriter;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Scanner;
 import java.util.Set;
@@ -13,8 +17,11 @@ import static java.lang.Double.parseDouble;
 
 // Galaxy builder application
 public class GalaxyBuilderApp {
+    private static final String JSON_STORE = "./PersonalProject/data/galaxy.json";
     private Galaxy galaxy;
     private Scanner input;
+    private JsonWriter jsonWriter;
+    private JsonReader jsonReader;
 
     // EFFECT: Runs galaxy builder application
     public GalaxyBuilderApp() {
@@ -55,6 +62,8 @@ public class GalaxyBuilderApp {
         command = input.next();
         command = command.toLowerCase();
         galaxy = new Galaxy(command);
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
     }
 
 
@@ -69,6 +78,8 @@ public class GalaxyBuilderApp {
             print("\td -> Display your solar systems!");
         }
         print("\tc -> Change galaxy name");
+        print("\ts -> Save galaxy");
+        print("\tl -> Load galaxy");
         print("\tq -> Quit");
     }
 
@@ -79,9 +90,7 @@ public class GalaxyBuilderApp {
         if (command.equals("n")) {
             newSolarSystem();
         } else if (command.equals("c")) {
-            print("\n Enter new galaxy name:");
-            String newName = input.next();
-            galaxy.changeName(newName);
+            changeGalaxyName();
         } else if (command.equals("e")) {
             if (galaxy.getSolarSystemCount() != 0) {
                 editSolarSystems();
@@ -94,8 +103,39 @@ public class GalaxyBuilderApp {
             } else {
                 print("Selection not valid :(, try again");
             }
+        } else if (command.equals("s")) {
+            saveGalaxy();
+        } else if (command.equals("l")) {
+            loadGalaxy();
         } else {
             print("Selection not valid :(, try again");
+        }
+    }
+
+    private void changeGalaxyName() {
+        print("\n Enter new galaxy name:");
+        String newName = input.next();
+        galaxy.changeName(newName);
+        print("Changed galaxy name to " + newName);
+    }
+
+    private void loadGalaxy() {
+        try {
+            galaxy = jsonReader.read();
+            System.out.println("Loaded " + galaxy.getName() + " from " + JSON_STORE);
+        } catch (IOException e) {
+            System.out.println("Unable to read from file: " + JSON_STORE);
+        }
+    }
+
+    private void saveGalaxy() {
+        try {
+            jsonWriter.open();
+            jsonWriter.write(galaxy);
+            jsonWriter.close();
+            System.out.println("Saved " + galaxy.getName() + " to " + JSON_STORE);
+        } catch (FileNotFoundException e) {
+            System.out.println("Unable to write to file: " + JSON_STORE);
         }
     }
 
