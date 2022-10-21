@@ -11,9 +11,18 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class JsonTest {
     protected void checkSolarSystem(String name, CentralBody centralBody, HashMap<String, Planet> planets, SolarSystem solarSystem) {
+        ArrayList<Planet> expectedPlanetsValues = new ArrayList<Planet>();
+        ArrayList<Planet> planetsValues = new ArrayList<Planet>();
         assertEquals(name, solarSystem.getName());
+        assertEquals(planets.size(), solarSystem.getPlanetCount());
         checkCentralBody(centralBody, solarSystem.getCentralBody());
-        checkPlanets((ArrayList<Planet>) planets.values(), (ArrayList<Planet>) solarSystem.getPlanets().values());
+        for (Planet p : planets.values()) {
+            expectedPlanetsValues.add(p);
+        }
+        for (Planet p : solarSystem.getPlanets().values()) {
+            planetsValues.add(p);
+        }
+        checkPlanets(expectedPlanetsValues, planetsValues);
     }
 
     private void checkPlanets(ArrayList<Planet> expectedPlanets, ArrayList<Planet> planets) {

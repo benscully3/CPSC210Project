@@ -18,7 +18,7 @@ public class JsonWriterTest extends JsonTest{
     @Test
     void testWriterInvalidFile() throws FileNotFoundException {
         Galaxy galaxy = new Galaxy("Galaxy");
-        JsonWriter writer = new JsonWriter("./PersonalProject/data/my\0illegal:fileName.json");
+        JsonWriter writer = new JsonWriter("./data/my\0illegal:fileName.json");
         assertThrows(FileNotFoundException.class, () -> {
                     writer.open();
         }, "Throw expected");
@@ -54,12 +54,12 @@ public class JsonWriterTest extends JsonTest{
                 solarSystems.add(s);
             }
 
-            JsonWriter writer = new JsonWriter("./data/testWriterGeneralGalaxy.json");
+            JsonWriter writer = new JsonWriter("./PersonalProject/data/testWriterGeneralGalaxy.json");
             writer.open();
             writer.write(galaxy);
             writer.close();
 
-            JsonReader reader = new JsonReader("./data/testWriterGeneralGalaxy.json");
+            JsonReader reader = new JsonReader("./PersonalProject/data/testWriterGeneralGalaxy.json");
             Galaxy galaxyRead = reader.read();
 
             assertEquals("galaxy", galaxyRead.getName());
