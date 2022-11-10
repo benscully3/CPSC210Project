@@ -1,5 +1,15 @@
 {
-    "solarSystems": [],
-    "solarSystemCount": 0,
-    "name": "a"
+    "solarSystems": [{
+        "planets": [],
+        "name": "solar system",
+        "centralBody": {
+            "centralBodyType": "Giant Star",
+            "mass": 2.2183673104706543,
+            "name": "sun",
+            "luminosity": 5,
+            "radius": 1.2392892539032112
+        }
+    }],
+    "solarSystemCount": 1,
+    "name": "andromeda"
 }
