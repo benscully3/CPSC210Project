@@ -14,12 +14,15 @@ import java.awt.event.ActionEvent;
 
 public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
     private static final String JSON_STORE = "./data/galaxy.json";
-    private static final int WIDTH = 1000;
-    private static final int HEIGHT = 1000;
+    private static final int WIDTH = 800;
+    private static final int HEIGHT = 600;
     private Galaxy galaxy;
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
+    private JFrame frame;
+    private JSplitPane splitPaneTop;
+    private JSplitPane splitPane;
     private JPanel galaxyPanel;
 
     private DefaultListModel solarSystemsModel;
@@ -27,29 +30,80 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
 
     public GalaxyBuilderGUI() {
         // set up lists and readers/writers
+        frame = new JFrame();
+        initializeGalaxy();
+        Dimension minSize = new Dimension(100, 50);
 
-        galaxyPanel = new JPanel();
-        galaxyPanel.setLayout(new BoxLayout(galaxyPanel, BoxLayout.PAGE_AXIS));
-        addImageToGUI();
-        add(galaxyPanel);
-        addSolarSystemsPanel();
-        addButtonsPanel();
+        JScrollPane solarSystemPane = addSolarSystemsPane();
+        JScrollPane imagePane = addImageToGUI();
+        JScrollPane buttonsPane = addButtonsPane();
+
+        splitPaneTop = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
+                solarSystemPane, imagePane);
+        splitPaneTop.setDividerLocation(250);
+        splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
+                splitPaneTop, buttonsPane);
+
+        splitPane.setOneTouchExpandable(true);
+        splitPane.setDividerLocation(375);
+
+        splitPane.setPreferredSize(new Dimension(WIDTH, HEIGHT));
+
+        solarSystemPane.setMinimumSize(minSize);
+        buttonsPane.setMinimumSize(minSize);
+        imagePane.setMinimumSize(minSize);
+        frame.add(splitPane);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setTitle("My Galaxy Builder");
+        frame.pack();
+        frame.setVisible(true);
     }
 
-    private void addButtonsPanel() {
+    private void initializeGalaxy() {
+        String name;
+        name = JOptionPane.showInputDialog(null,
+                "Name your galaxy! \n (You can change this later)",
+                "Name galaxy",
+                JOptionPane.QUESTION_MESSAGE);
+
+        if (name != null) {
+            galaxy = new Galaxy(name);
+        } else {
+            galaxy = new Galaxy("Default");
+        }
+    }
+
+    private JScrollPane addButtonsPane() {
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(3,2));
+        buttonPanel.setLayout(new GridLayout(2,3));
         buttonPanel.add(new JButton(new AddSolarSystemAction()));
-        buttonPanel.add(new JButton(new EditSolarSystemsAction()));
-        buttonPanel.add(new JButton(new DisplaySolarSystemsAction()));
+        JButton editButton = new JButton(new EditSolarSystemsAction());
+        buttonPanel.add(editButton);
+        JButton displayButton = new JButton(new DisplaySolarSystemsAction());
+        buttonPanel.add(displayButton);
         buttonPanel.add(new JButton(new ChangeGalaxyNameAction()));
         buttonPanel.add(new JButton(new SaveAction()));
         buttonPanel.add(new JButton(new LoadAction()));
+
+        editButton.setEnabled(false);
+        displayButton.setEnabled(false);
+
+        JScrollPane buttonsPane = new JScrollPane(buttonPanel);
+        return buttonsPane;
     }
 
-    private void addSolarSystemsPanel() {
+    private JScrollPane addSolarSystemsPane() {
         solarSystemsModel = new DefaultListModel();
         updateSolarSystems();
+        solarSystems = new JList(solarSystemsModel);
+
+        solarSystems.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        solarSystems.setSelectedIndex(0);
+        solarSystems.addListSelectionListener(this);
+
+        JScrollPane solarSystemsScrollPane = new JScrollPane(solarSystems);
+
+        return solarSystemsScrollPane;
     }
 
     private void updateSolarSystems() {
@@ -66,13 +120,20 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
         return result;
     }
 
-    private void addImageToGUI() {
-        ImageIcon icon = new ImageIcon("./data/tobs.jpg");
-        JLabel label = new JLabel(icon);
+    private JScrollPane addImageToGUI() {
+        ImageIcon icon = new ImageIcon("./data/galaxy.jpg");
+        JLabel galaxyImage = new JLabel(icon);
+        JLabel galaxyName = new JLabel("The " + galaxy.getName() + " galaxy!");
+        galaxyName.setFont(new Font("Serif", Font.BOLD, 28));
+        galaxyName.setForeground(Color.white);
         JPanel background = new JPanel();
-        background.setPreferredSize(new Dimension(150, 150));
-        galaxyPanel.add(background);
-        background.add(label);
+        background.setPreferredSize(new Dimension(50, 50));
+        background.setBackground(Color.black);
+        background.add(galaxyName);
+        background.add(galaxyImage);
+
+        JScrollPane imagePane = new JScrollPane(background);
+        return imagePane;
     }
 
     @Override
