@@ -1,6 +1,6 @@
 package model;
 
-import exceptions.NameAlreadyUsed;
+import exceptions.NameAlreadyUsedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -43,7 +43,7 @@ public class GalaxyTest {
     }
 
     @Test
-    public void addSolarSystemTest() throws NameAlreadyUsed {
+    public void addSolarSystemTest() throws NameAlreadyUsedException {
         galaxy = new Galaxy("Galaxy");
         galaxy.addSolarSystem(solarSystem1);
         solarSystems.put("SS1", solarSystem1);
@@ -54,7 +54,7 @@ public class GalaxyTest {
     }
 
     @Test
-    public void addSolarSystemTestMultiple() throws NameAlreadyUsed {
+    public void addSolarSystemTestMultiple() throws NameAlreadyUsedException {
         galaxy = new Galaxy("Galaxy");
         galaxy.addSolarSystem(solarSystem1);
         solarSystems.put("SS1", solarSystem1);
@@ -73,7 +73,7 @@ public class GalaxyTest {
 
     // Tests error throwing
     @Test
-    public void addSolarSystemTestMultipleNameUsed() throws NameAlreadyUsed {
+    public void addSolarSystemTestMultipleNameUsed() throws NameAlreadyUsedException {
         galaxy = new Galaxy("Galaxy");
         galaxy.addSolarSystem(solarSystem1);
         solarSystems.put("SS1", solarSystem1);
@@ -82,13 +82,13 @@ public class GalaxyTest {
         assertEquals(solarSystem1, galaxy.getSolarSystem("SS1"));
         assertEquals(solarSystems, galaxy.getSolarSystems());
 
-        assertThrows(NameAlreadyUsed.class, () -> {
+        assertThrows(NameAlreadyUsedException.class, () -> {
             galaxy.addSolarSystem(solarSystem1);
         }, "NameAlreadyUsed throw was expected");
     }
 
     @Test
-    public void removeSolarSystemTest() throws NameAlreadyUsed {
+    public void removeSolarSystemTest() throws NameAlreadyUsedException {
         galaxy = new Galaxy("Galaxy");
         galaxy.addSolarSystem(solarSystem1);
         galaxy.addSolarSystem(solarSystem2);
@@ -104,7 +104,7 @@ public class GalaxyTest {
     }
 
     @Test
-    public void removeSolarSystemTestMultiple() throws NameAlreadyUsed {
+    public void removeSolarSystemTestMultiple() throws NameAlreadyUsedException {
         galaxy = new Galaxy("Galaxy");
         galaxy.addSolarSystem(solarSystem1);
         galaxy.addSolarSystem(solarSystem2);

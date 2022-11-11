@@ -1,6 +1,6 @@
 package Persistence;
 
-import exceptions.NameAlreadyUsed;
+import exceptions.NameAlreadyUsedException;
 import model.*;
 
 import java.util.ArrayList;
@@ -56,7 +56,7 @@ public class JsonTest {
             galaxy.addSolarSystem(new SolarSystem("solar System2", neutronStar));
             galaxy.addSolarSystem(new SolarSystem("solar System3", whiteDwarf));
             galaxy.addSolarSystem(new SolarSystem("solar System4", giantStar));
-        } catch (NameAlreadyUsed e) {
+        } catch (NameAlreadyUsedException e) {
             throw new RuntimeException(e);
         }
         SolarSystem solarSystem = galaxy.getSolarSystem("solar System1");

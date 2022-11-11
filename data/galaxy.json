@@ -1,15 +1,27 @@
 {
-    "solarSystems": [{
-        "planets": [],
-        "name": "solar system",
-        "centralBody": {
-            "centralBodyType": "Giant Star",
-            "mass": 2.2183673104706543,
-            "name": "sun",
-            "luminosity": 5,
-            "radius": 1.2392892539032112
+    "solarSystems": [
+        {
+            "planets": [],
+            "name": "jeez",
+            "centralBody": {
+                "centralBodyType": "Black Hole",
+                "mass": 5,
+                "name": "idk",
+                "radius": 14.75
+            }
+        },
+        {
+            "planets": [],
+            "name": "sheesh",
+            "centralBody": {
+                "centralBodyType": "Giant Star",
+                "mass": 2.84953418898386,
+                "name": "big boy",
+                "luminosity": 12,
+                "radius": 1.9198986566003808
+            }
         }
-    }],
-    "solarSystemCount": 1,
+    ],
+    "solarSystemCount": 2,
     "name": "andromeda"
 }

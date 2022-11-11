@@ -3,17 +3,17 @@ package exceptions;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-public class NotPositiveNumberTest {
+public class NegativeNumberExceptionTest {
 
     @Test
     public void throwNotPositiveNumberTest(){
-        assertThrows(NotPositiveNumber.class, () -> {
+        assertThrows(NegativeNumberException.class, () -> {
             testHelperFunction();
         }, "NotPositiveNumber throw was expected");
     }
 
-    public void testHelperFunction() throws NotPositiveNumber {
-        throw new NotPositiveNumber();
+    public void testHelperFunction() throws NegativeNumberException {
+        throw new NegativeNumberException();
     }
 
 

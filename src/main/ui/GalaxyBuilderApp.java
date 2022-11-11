@@ -1,8 +1,8 @@
 package ui;
 
-import exceptions.BadCommand;
-import exceptions.NameAlreadyUsed;
-import exceptions.NotPositiveNumber;
+import exceptions.BadCommandException;
+import exceptions.NameAlreadyUsedException;
+import exceptions.NegativeNumberException;
 import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
@@ -375,7 +375,7 @@ public class GalaxyBuilderApp {
                 try {
                     processSolarSystemCommand(command, solarSystems.keySet());
                     keepGoing = false;
-                } catch (BadCommand e) {
+                } catch (BadCommandException e) {
                     print("\n That solar system doesn't exist :(, try again!");
                 }
             }
@@ -384,7 +384,7 @@ public class GalaxyBuilderApp {
 
 
     // EFFECT: processes the command to choose which solar system to edit
-    private void processSolarSystemCommand(String command, Set<String> solarSystemNames) throws BadCommand {
+    private void processSolarSystemCommand(String command, Set<String> solarSystemNames) throws BadCommandException {
         for (String solarSystemName : solarSystemNames) {
             if (command.equals(solarSystemName)) {
                 SolarSystem solarSystem = galaxy.getSolarSystem(solarSystemName);
@@ -393,7 +393,7 @@ public class GalaxyBuilderApp {
                 return;
             }
         }
-        throw new BadCommand();
+        throw new BadCommandException();
     }
 
 
@@ -415,7 +415,7 @@ public class GalaxyBuilderApp {
                     try {
                         processEditSolarSystemCommand(command, planets, solarSystem.getName());
                         keepGoing = false;
-                    } catch (BadCommand e) {
+                    } catch (BadCommandException e) {
                         System.out.println("Selection not valid :(, try again");
                     }
                 }
@@ -439,7 +439,7 @@ public class GalaxyBuilderApp {
 
     // EFFECT: process command to edit a solar system
     private void processEditSolarSystemCommand(String command, HashMap<String, Planet> planets,
-                                               String solarSystemName) throws BadCommand {
+                                               String solarSystemName) throws BadCommandException {
         SolarSystem solarSystem = galaxy.getSolarSystem(solarSystemName);
         boolean certain;
 
@@ -455,7 +455,7 @@ public class GalaxyBuilderApp {
                 supernova(solarSystem);
             }
         } else {
-            throw new BadCommand();
+            throw new BadCommandException();
         }
     }
 
@@ -607,7 +607,7 @@ public class GalaxyBuilderApp {
                 try {
                     planet = processPlanetCommand(command, planets);
                     keepGoing = false;
-                } catch (BadCommand e) {
+                } catch (BadCommandException e) {
                     print("That planet wasn't found :( Try again!");
                 }
             }
@@ -629,14 +629,14 @@ public class GalaxyBuilderApp {
 
 
     // EFFECT: searches for planet to remove and returns its name if found, throws error otherwise
-    private Planet processPlanetCommand(String command, HashMap<String, Planet> planets) throws BadCommand {
+    private Planet processPlanetCommand(String command, HashMap<String, Planet> planets) throws BadCommandException {
         Set<String> planetNames = planets.keySet();
         for (String planetName : planetNames) {
             if (command.equals(planetName)) {
                 return planets.get(planetName);
             }
         }
-        throw new BadCommand();
+        throw new BadCommandException();
     }
 
 
@@ -694,7 +694,7 @@ public class GalaxyBuilderApp {
             try {
                 checkPlanetName(planetName, solarSystem.getPlanets());
                 keepGoing = false;
-            } catch (NameAlreadyUsed e) {
+            } catch (NameAlreadyUsedException e) {
                 print("\nThis solar system has a planet with that name already. Pick a different name");
             }
         }
@@ -721,11 +721,12 @@ public class GalaxyBuilderApp {
 
 
     // EFFECT: check that a planet doesn't already have a given name in a solar system
-    private void checkPlanetName(String searchPlanetName, HashMap<String, Planet> planets) throws NameAlreadyUsed {
+    private void checkPlanetName(String searchPlanetName, HashMap<String, Planet> planets)
+            throws NameAlreadyUsedException {
         Set<String> planetNames = planets.keySet();
         for (String planetName : planetNames) {
             if (planetName.equals(searchPlanetName)) {
-                throw new NameAlreadyUsed();
+                throw new NameAlreadyUsedException();
             }
         }
     }
@@ -753,7 +754,7 @@ public class GalaxyBuilderApp {
             try {
                 number = parseDouble(input.next());
                 if (number <= 0) {
-                    throw new NotPositiveNumber();
+                    throw new NegativeNumberException();
                 }
                 keepGoing = false;
             } catch (Exception e) {

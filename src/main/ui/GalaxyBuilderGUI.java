@@ -1,20 +1,31 @@
 package ui;
 
-import model.Galaxy;
-import model.SolarSystem;
+import exceptions.BadCommandException;
+import exceptions.CancelException;
+import exceptions.NameAlreadyUsedException;
+import exceptions.NegativeNumberException;
+import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
+import javax.accessibility.AccessibleContext;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import static java.lang.Double.NaN;
+import static java.lang.Double.parseDouble;
 
 
 public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
     private static final String JSON_STORE = "./data/galaxy.json";
-    private static final int WIDTH = 800;
+    private static final int WIDTH = 1000;
     private static final int HEIGHT = 600;
     private Galaxy galaxy;
     private JsonWriter jsonWriter;
@@ -23,7 +34,6 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
     private JFrame frame;
     private JSplitPane splitPaneTop;
     private JSplitPane splitPane;
-    private JPanel galaxyPanel;
 
     private DefaultListModel solarSystemsModel;
     private JList solarSystems;
@@ -32,7 +42,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
         // set up lists and readers/writers
         frame = new JFrame();
         initializeGalaxy();
-        Dimension minSize = new Dimension(100, 50);
+        Dimension minSize = new Dimension(150, 80);
 
         JScrollPane solarSystemPane = addSolarSystemsPane();
         JScrollPane imagePane = addImageToGUI();
@@ -40,7 +50,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
 
         splitPaneTop = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 solarSystemPane, imagePane);
-        splitPaneTop.setDividerLocation(250);
+        splitPaneTop.setDividerLocation(300);
         splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 splitPaneTop, buttonsPane);
 
@@ -71,25 +81,37 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
         } else {
             galaxy = new Galaxy("Default");
         }
+        jsonWriter = new JsonWriter(JSON_STORE);
+        jsonReader = new JsonReader(JSON_STORE);
     }
 
     private JScrollPane addButtonsPane() {
+        boolean hasSolarSystems = galaxy.getSolarSystemCount() != 0;
+
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(2,3));
-        buttonPanel.add(new JButton(new AddSolarSystemAction()));
+
+        JButton addSolarSystemButton = new JButton(new AddSolarSystemAction());
         JButton editButton = new JButton(new EditSolarSystemsAction());
+        JButton displayButton = new JButton(new SolarSystemDataAction());
+        JButton changeNameButton = new JButton(new ChangeGalaxyNameAction());
+        JButton saveButton = new JButton(new SaveAction());
+        JButton loadButton = new JButton(new LoadAction());
+
+        buttonPanel.add(addSolarSystemButton);
         buttonPanel.add(editButton);
-        JButton displayButton = new JButton(new DisplaySolarSystemsAction());
         buttonPanel.add(displayButton);
-        buttonPanel.add(new JButton(new ChangeGalaxyNameAction()));
-        buttonPanel.add(new JButton(new SaveAction()));
-        buttonPanel.add(new JButton(new LoadAction()));
-
-        editButton.setEnabled(false);
-        displayButton.setEnabled(false);
-
-        JScrollPane buttonsPane = new JScrollPane(buttonPanel);
-        return buttonsPane;
+        buttonPanel.add(changeNameButton);
+        buttonPanel.add(saveButton);
+        buttonPanel.add(loadButton);
+        if (hasSolarSystems) {
+            editButton.setEnabled(true);
+            displayButton.setEnabled(true);
+        } else {
+            editButton.setEnabled(false);
+            displayButton.setEnabled(false);
+        }
+        return new JScrollPane(buttonPanel);
     }
 
     private JScrollPane addSolarSystemsPane() {
@@ -121,6 +143,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
     }
 
     private JScrollPane addImageToGUI() {
+
         ImageIcon icon = new ImageIcon("./data/galaxy.jpg");
         JLabel galaxyImage = new JLabel(icon);
         JLabel galaxyName = new JLabel("The " + galaxy.getName() + " galaxy!");
@@ -134,6 +157,232 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
 
         JScrollPane imagePane = new JScrollPane(background);
         return imagePane;
+    }
+
+    // MODIFIES: splitPaneTop
+    // EFFECT: updates the galaxy name in the image by remaking the JPanel
+    /**
+     * Citation: Method of updating component of JSplitPane from
+     * Wolfgang Fahl on stack exchange
+     * (Question Title: How dynamically change components in JSplitPane)
+     */
+    private void updateNameLabel(JComponent oldComponent) {
+        JSplitPane parent = (JSplitPane) oldComponent.getParent();
+        int dividerLocation = parent.getDividerLocation();
+        parent.remove(oldComponent);
+
+        JScrollPane newChild = addImageToGUI();
+
+        parent.add(newChild);
+        parent.setDividerLocation(dividerLocation);
+        newChild.revalidate();
+        newChild.repaint();
+
+    }
+
+    private void updateButtons(JComponent oldComponent) {
+        JSplitPane parent = (JSplitPane) oldComponent.getParent();
+        int dividerLocation = parent.getDividerLocation();
+        parent.remove(oldComponent);
+
+        JScrollPane newChild = addButtonsPane();
+
+        parent.add(newChild);
+        parent.setDividerLocation(dividerLocation);
+        newChild.revalidate();
+        newChild.repaint();
+
+    }
+
+    private String getStringInput(String s) throws CancelException {
+        String input;
+        input = JOptionPane.showInputDialog(null,
+                s,
+                "User input",
+                JOptionPane.QUESTION_MESSAGE);
+        if (input != null) {
+            return input;
+        } else {
+            throw new CancelException();
+        }
+    }
+
+
+    private double getPositiveDoubleInput(String s, double minValue, double maxValue)
+            throws NumberFormatException, BadCommandException, NegativeNumberException, CancelException {
+        String input;
+        double doubleInput;
+        input = JOptionPane.showInputDialog(null,
+                s,
+                "User input",
+                JOptionPane.QUESTION_MESSAGE);
+        if (input == null) {
+            throw new CancelException();
+        }
+        doubleInput = parseDouble(input);
+
+        if (doubleInput < 0) {
+            throw new NegativeNumberException();
+        }
+        if ((doubleInput < minValue) || (doubleInput > maxValue)) {
+            throw new BadCommandException();
+        }
+
+        return doubleInput;
+    }
+
+    private int getCentralBodyTypeInput() throws CancelException {
+        String[] options = new String[] {"Giant Star", "White Dwarf", "Neutron Star", "Black Hole"};
+        int response = JOptionPane.showOptionDialog(null, "Choose a central body",
+                "Central bodies", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
+                null, options, options[0]);
+        if (response != -1) {
+            return response;
+        } else {
+            throw new CancelException();
+        }
+    }
+
+
+    private CentralBody makeCentralBody(int centralBodyType) throws CancelException {
+        CentralBody centralBody = null;
+        switch (centralBodyType) {
+            case 0:
+                centralBody =  makeGiantStar();
+                break;
+            case 1:
+                centralBody =  makeWhiteDwarf();
+                break;
+            case 2:
+                centralBody =  makeNeutronStar();
+                break;
+            case 3:
+                centralBody = makeBlackHole();
+                break;
+
+        }
+        return centralBody;
+    }
+
+    private BlackHole makeBlackHole() throws CancelException {
+        String name;
+        double mass = 0;
+        boolean keepGoing = true;
+        name = getStringInput("Name your black hole");
+        while (keepGoing) {
+            try {
+                mass = getPositiveDoubleInput("Choose the black hole's mass. \n Mass must be above 2.5",
+                        2.5, Double.POSITIVE_INFINITY);
+                keepGoing = false;
+            } catch (NumberFormatException n) {
+                JOptionPane.showMessageDialog(null, "Please enter a number");
+            } catch (NegativeNumberException e) {
+                JOptionPane.showMessageDialog(null, "Please enter a positive mass");
+            } catch (BadCommandException b) {
+                JOptionPane.showMessageDialog(null, "Enter a mass over 2.5 please");
+            }
+        }
+        BlackHole blackHole = new BlackHole(name, mass);
+        return blackHole;
+    }
+
+    private NeutronStar makeNeutronStar() throws CancelException {
+        String name;
+        double mass = 0;
+        boolean keepGoing = true;
+        name = getStringInput("Name your neutron star");
+        while (keepGoing) {
+            try {
+                mass = getPositiveDoubleInput("Choose the neutron star's mass. \n Mass must be between 1.4 and 1.5",
+                        1.4, 2.5);
+                keepGoing = false;
+            } catch (NumberFormatException n) {
+                JOptionPane.showMessageDialog(null, "Please enter a number");
+            } catch (NegativeNumberException e) {
+                JOptionPane.showMessageDialog(null, "Please enter a positive mass");
+            } catch (BadCommandException b) {
+                JOptionPane.showMessageDialog(null, "Enter a mass between 1.4 and 2.5 please");
+            }
+        }
+        NeutronStar neutronStar = new NeutronStar(name, mass);
+        return neutronStar;
+    }
+
+    private WhiteDwarf makeWhiteDwarf() throws CancelException {
+        String name;
+        double mass = 0;
+        boolean keepGoing = true;
+        name = getStringInput("Name your neutron star");
+        while (keepGoing) {
+            try {
+                mass = getPositiveDoubleInput("Choose the white dwarf's mass. \n Mass must be below 1.4",
+                        0, 1.4);
+                keepGoing = false;
+            } catch (NumberFormatException n) {
+                JOptionPane.showMessageDialog(null, "Please enter a number");
+            } catch (NegativeNumberException e) {
+                JOptionPane.showMessageDialog(null, "Please enter a positive mass");
+            } catch (BadCommandException b) {
+                JOptionPane.showMessageDialog(null, "Enter a mass below 1.4");
+            }
+        }
+        WhiteDwarf whiteDwarf = new WhiteDwarf(name, mass);
+        return whiteDwarf;
+    }
+
+    private GiantStar makeGiantStar() throws CancelException {
+        String name;
+        double luminosity = 0;
+        boolean keepGoing = true;
+        name = getStringInput("Name your star");
+        while (keepGoing) {
+            try {
+                luminosity = getPositiveDoubleInput("Choose the star's Luminosity. \n (Units of solar luminosity)",
+                        0, Double.POSITIVE_INFINITY);
+                keepGoing = false;
+            } catch (NumberFormatException n) {
+                JOptionPane.showMessageDialog(null, "Please enter a number");
+            } catch (NegativeNumberException e) {
+                JOptionPane.showMessageDialog(null, "Please enter a positive luminosity");
+            } catch (BadCommandException b) {
+                JOptionPane.showMessageDialog(null, "n/a");
+            }
+        }
+        GiantStar giantStar = new GiantStar(name, luminosity);
+        return giantStar;
+    }
+
+    private JLabel addSolarSystemToPane(SolarSystem solarSystem) {
+        String data;
+        CentralBody centralBody = solarSystem.getCentralBody();
+        ArrayList<Planet> planets = new ArrayList<>(solarSystem.getPlanets().values());
+        data = "- - - -\n" + solarSystem.getName();
+        data = data + centralBodyData(centralBody);
+        //TODO: add planets data
+        JLabel dataLabel = new JLabel(data);
+
+        return dataLabel;
+    }
+
+    private String centralBodyData(CentralBody centralBody) {
+        String dataString;
+        String name = centralBody.getName();
+        String mass = String.format("%.2f", centralBody.getMass());
+        String radius = String.format("%.2f", centralBody.getRadius());
+        String centralBodyType = centralBody.getCentralBodyType();
+        dataString = "\n\t CENTRAL BODY:" + name + " - " + centralBodyType;
+        dataString += "\t\tMass: " + mass + " Solar masses";
+        if (centralBodyType.equals("Giant Star")) {
+            dataString += "\t\tRadius: " + radius + " Solar radii";
+            GiantStar giantStar = (GiantStar) centralBody;
+            String luminosity = String.format("%.2f", giantStar.getLuminosity());
+            dataString += "\t\tLuminosity: " + luminosity + " Solar luminosities";
+        } else if (centralBodyType.equals("Binary")) {
+            // not currently implemented
+        } else {
+            dataString += "\t\tRadius: " + radius + " kilometers";
+        }
+        return dataString;
     }
 
     @Override
@@ -153,10 +402,33 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-            //TODO
+            String name;
+            CentralBody centralBody;
+            boolean keepGoing = true;
+            try {
+                int centralBodyType = getCentralBodyTypeInput();
+                centralBody =  makeCentralBody(centralBodyType);
+            } catch (CancelException c) {
+                return;
+            }
+            while (keepGoing) {
+                try {
+                    name = getStringInput("Enter a name for the solar system \n Don't use a name you've used already!");
+                    SolarSystem solarSystem = new SolarSystem(name, centralBody);
+                    galaxy.addSolarSystem(solarSystem);
+                    keepGoing = false;
+                } catch (NameAlreadyUsedException n) {
+                    JOptionPane.showMessageDialog(null, "Uh oh! Looks like that name has been used already");
+                } catch (CancelException c) {
+                    return;
+                }
+            }
+            updateSolarSystems();
+            updateButtons((JComponent) splitPane.getBottomComponent());
         }
-
     }
+
+
 
     /**
      * Represents action to be taken when user wants to add a new solar
@@ -165,7 +437,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
     private class EditSolarSystemsAction extends AbstractAction {
 
         EditSolarSystemsAction() {
-            super("Edit Solar Systems");
+            super("Edit Solar Systems (Not yet implemented)");
         }
 
         @Override
@@ -178,17 +450,37 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
      * Represents action to be taken when user wants to add a new solar
      * system to the galaxy.
      */
-    private class DisplaySolarSystemsAction extends AbstractAction {
+    private class SolarSystemDataAction extends AbstractAction {
 
-        DisplaySolarSystemsAction() {
-            super("Display Solar Systems");
+        SolarSystemDataAction() {
+            super("Display Solar Systems' data");
         }
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-            //TODO
+            JFrame solarSystemDataFrame = new JFrame("Solar System Data");
+            solarSystemDataFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            JLabel dataLabel = null;
+            JScrollPane scrollPane = new JScrollPane();
+
+            ArrayList<SolarSystem> solarSystems = new ArrayList<>(galaxy.getSolarSystems().values());
+            for (SolarSystem solarSystem : solarSystems) {
+                dataLabel = addSolarSystemToPane(solarSystem);
+                scrollPane.add(dataLabel);
+                //TODO: make it work
+            }
+
+            scrollPane.setMinimumSize(new Dimension(200,200));
+            scrollPane.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT / 2));
+
+            solarSystemDataFrame.add(scrollPane, BorderLayout.CENTER);
+            solarSystemDataFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+            solarSystemDataFrame.pack();
+            solarSystemDataFrame.setVisible(true);
         }
     }
+
+
 
     /**
      * Represents action to be taken when user wants to add a new solar
@@ -202,9 +494,18 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-            //TODO
+            String newName;
+            newName = JOptionPane.showInputDialog(null,
+                    "Rename your galaxy!",
+                    "Rename galaxy",
+                    JOptionPane.QUESTION_MESSAGE);
+            if (newName != null) {
+                galaxy = new Galaxy(newName);
+                updateNameLabel((JComponent) splitPaneTop.getRightComponent());
+            }
         }
     }
+
 
     /**
      * Represents action to be taken when user wants to add a new solar
@@ -218,7 +519,15 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-            //TODO
+            try {
+                jsonWriter.open();
+                jsonWriter.write(galaxy);
+                jsonWriter.close();
+                JOptionPane.showMessageDialog(null, "Saved " + galaxy.getName() + " to " + JSON_STORE);
+
+            } catch (FileNotFoundException e) {
+                JOptionPane.showMessageDialog(null, "Unable to write to file: " + JSON_STORE);
+            }
         }
     }
 
@@ -234,7 +543,17 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-            //TODO
+            try {
+                galaxy = jsonReader.read();
+                JOptionPane.showMessageDialog(null, "Loaded " + galaxy.getName() + " from " + JSON_STORE);
+            } catch (IOException e) {
+                JOptionPane.showMessageDialog(null, "Unable to read from file: " + JSON_STORE);
+
+                System.out.println("Unable to read from file: " + JSON_STORE);
+            }
+            updateButtons((JComponent) splitPane.getBottomComponent());
+            updateNameLabel((JComponent) splitPaneTop.getRightComponent());
+            updateSolarSystems();
         }
     }
 }

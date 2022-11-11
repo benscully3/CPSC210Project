@@ -1,6 +1,6 @@
 package model;
 
-import exceptions.NameAlreadyUsed;
+import exceptions.NameAlreadyUsedException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -23,14 +23,14 @@ public class Galaxy implements Writable {
     // MODIFIES: this
     // EFFECT: adds a solar system to the galaxy
     //         check's if name has already been used and throws an error if it has
-    public void addSolarSystem(SolarSystem solarSystem) throws NameAlreadyUsed {
+    public void addSolarSystem(SolarSystem solarSystem) throws NameAlreadyUsedException {
         String solarSystemName = solarSystem.getName();
         
         if (solarSystems.get(solarSystemName) == null) {
             solarSystems.put(solarSystemName, solarSystem);
             solarSystemCount = solarSystemCount + 1;
         } else {
-            throw new NameAlreadyUsed();
+            throw new NameAlreadyUsedException();
         }
     }
 

@@ -4,16 +4,16 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class BadCommandTest {
+public class BadCommandExceptionTest {
 
     @Test
     public void throwBadCommandTest(){
-        assertThrows(BadCommand.class, () -> {
+        assertThrows(BadCommandException.class, () -> {
             testHelperFunction();
         }, "BadCommand throw was expected");
     }
 
-    public void testHelperFunction() throws BadCommand {
-        throw new BadCommand();
+    public void testHelperFunction() throws BadCommandException {
+        throw new BadCommandException();
     }
 }

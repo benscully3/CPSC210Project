@@ -1,6 +1,6 @@
 package persistence;
 
-import exceptions.NameAlreadyUsed;
+import exceptions.NameAlreadyUsedException;
 import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -66,7 +66,7 @@ public class JsonReader {
         addPlanets(solarSystem, jsonSolarSystem);
         try {
             galaxy.addSolarSystem(solarSystem);
-        } catch (NameAlreadyUsed e) {
+        } catch (NameAlreadyUsedException e) {
             throw new RuntimeException(e);
         }
     }
