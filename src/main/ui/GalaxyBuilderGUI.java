@@ -8,19 +8,19 @@ import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.tree.DefaultMutableTreeNode;
+
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
-import static java.lang.Double.min;
+import java.util.ArrayList;
 import static java.lang.Double.parseDouble;
 
 // Galaxy Builder GUI application
@@ -32,26 +32,28 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
     private JsonWriter jsonWriter;
     private JsonReader jsonReader;
 
-    private JFrame frame;
-    private JSplitPane splitPaneTop;
-    private JSplitPane splitPane;
+    private final JSplitPane splitPaneTop;
+    private final JSplitPane splitPane;
 
     private DefaultListModel solarSystemsModel;
     private JList solarSystems;
 
+
+    // MODIFIES: this
+    // EFFECT: sets up and formats main GUI frame and buttons
     public GalaxyBuilderGUI() {
-        // set up lists and readers/writers
-        frame = new JFrame();
-        initializeGalaxy();
+        JFrame frame = new JFrame();
+        init();
         Dimension minSize = new Dimension(200, 150);
 
-        JScrollPane solarSystemPane = addSolarSystemsPane();
-        JScrollPane imagePane = addImageToGUI();
+        // set up three panes in the window
+        JScrollPane solarSystemPane = makeSolarSystemPane();
+        JScrollPane imagePane = makeImagePane();
         JScrollPane buttonsPane = addButtonsPane();
 
         splitPaneTop = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 solarSystemPane, imagePane);
-        splitPaneTop.setDividerLocation(300);
+        splitPaneTop.setDividerLocation(400);
         splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,
                 splitPaneTop, buttonsPane);
 
@@ -71,7 +73,10 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         frame.setVisible(true);
     }
 
-    private void initializeGalaxy() {
+
+    // MODIFIES: this
+    // EFFECT: initializes the galaxy and reader/writer
+    private void init() {
         String name;
         name = JOptionPane.showInputDialog(null,
                 "Name your galaxy! \n (You can change this later)",
@@ -87,12 +92,19 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         jsonReader = new JsonReader(JSON_STORE);
     }
 
+
+    // EFFECT: creates buttons to add, and edit solar systems,
+    //         display data, change galaxy name, and save and load
+    //         files
+    //         IF: there are solar systems present, all buttons are enabled
+    //         ELSE: edit and display solar system buttons are not enabled
     @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private JScrollPane addButtonsPane() {
         boolean hasSolarSystems = galaxy.getSolarSystemCount() != 0;
 
         JPanel buttonPanel = new JPanel();
-        buttonPanel.setLayout(new GridLayout(2,3));
+        buttonPanel.setLayout(new GridLayout(2, 3));
+
         JButton addSolarSystemButton = new JButton(new AddSolarSystemAction());
         JButton editButton = new JButton(new EditSolarSystemsAction());
         JMenuBar displayMenuBar = new JMenuBar();
@@ -102,7 +114,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
 
         JMenu menu = new JMenu("Solar System data");
         displayMenuBar.add(menu);
-        buildMenu(menu);
+        buildSolarSystemMenu(menu);
 
         buttonPanel.add(addSolarSystemButton);
         buttonPanel.add(editButton);
@@ -113,15 +125,19 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
 
         if (hasSolarSystems) {
             editButton.setEnabled(true);
+            displayMenuBar.setVisible(true);
             displayMenuBar.setEnabled(true);
         } else {
             editButton.setEnabled(false);
+            displayMenuBar.setVisible(false);
             displayMenuBar.setEnabled(false);
         }
         return new JScrollPane(buttonPanel);
     }
 
-    private void buildMenu(JMenu menu) {
+
+    // EFFECT: builds a menu of all the solar systems in the galaxy
+    private void buildSolarSystemMenu(JMenu menu) {
         JMenuItem menuItem;
 
         for (SolarSystem s : galaxy.getSolarSystems().values()) {
@@ -131,7 +147,10 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         }
     }
 
-    private JScrollPane addSolarSystemsPane() {
+
+    // EFFECT: Creates the pane that displays which solar systems
+    //         are in your galaxy
+    private JScrollPane makeSolarSystemPane() {
         solarSystemsModel = new DefaultListModel();
         updateSolarSystems();
         solarSystems = new JList(solarSystemsModel);
@@ -143,17 +162,21 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         return new JScrollPane(solarSystems);
     }
 
+
+    // EFFECT: Update the solar systems which are displayed in solar system pane
     private void updateSolarSystems() {
         solarSystemsModel.clear();
         for (SolarSystem solarSystem : galaxy.getSolarSystems().values()) {
-            String solarSystemString = solarSystem.getName() + " -:- Central Body: "
-                    + solarSystem.getCentralBody().getCentralBodyType() + " -:- # of planets: "
+            String solarSystemString = solarSystem.getName() + "  -:-  Central Body: "
+                    + solarSystem.getCentralBody().getCentralBodyType() + "  -:-  # of planets: "
                     + solarSystem.getPlanetCount();
             solarSystemsModel.addElement(solarSystemString);
         }
     }
 
-    private JScrollPane addImageToGUI() {
+
+    // EFFECT: create the pane with the galaxy name and image
+    private JScrollPane makeImagePane() {
 
         ImageIcon icon = new ImageIcon("./data/galaxy.jpg");
         JLabel galaxyImage = new JLabel(icon);
@@ -169,8 +192,10 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         return new JScrollPane(background);
     }
 
+
     // MODIFIES: splitPaneTop
     // EFFECT: updates the galaxy name in the image by remaking the JPanel
+
     /**
      * Citation: Method of updating component of JSplitPane from
      * Wolfgang Fahl on stack exchange
@@ -181,15 +206,16 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         int dividerLocation = parent.getDividerLocation();
         parent.remove(oldComponent);
 
-        JScrollPane newChild = addImageToGUI();
+        JScrollPane newChild = makeImagePane();
 
         parent.add(newChild);
         parent.setDividerLocation(dividerLocation);
         newChild.revalidate();
         newChild.repaint();
-
     }
 
+    // MODIFIES: this
+    // EFFECT: update the button pane by remaking the pane
     private void updateButtons(JComponent oldComponent) {
         JSplitPane parent = (JSplitPane) oldComponent.getParent();
         int dividerLocation = parent.getDividerLocation();
@@ -204,6 +230,9 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
 
     }
 
+    // EFFECT: gets input from user in the form of a string
+    //         IF: the user closes or cancels the input window
+    //             throw CancelException
     private String getStringInput(String s) throws CancelException {
         String input;
         input = JOptionPane.showInputDialog(null,
@@ -218,6 +247,13 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
     }
 
 
+    // EFFECT: gets input from user in the form of a string and tries to convert
+    //         it to a double between a minimum and maximum bound
+    //         IF: a non-double is input, throw NumberFormatException (from parseDouble)
+    //         IF: double is out of min/max bounds throw BadCommandException
+    //         IF: the user closes or cancels the input window
+    //             throw CancelException
+
     private double getPositiveDoubleInput(String s, double minValue, double maxValue)
             throws NumberFormatException, BadCommandException, NegativeNumberException, CancelException {
         String input;
@@ -230,7 +266,6 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
             throw new CancelException();
         }
         doubleInput = parseDouble(input);
-
         if (doubleInput < 0) {
             throw new NegativeNumberException();
         }
@@ -242,8 +277,12 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
     }
 
 
+    // EFFECT: parse the central body choice of the user
+    //         0 => Giant star     1 => White Dwarf
+    //         2 => Neutron star   3 => Black Hole
+    //         IF: the user cancels or closes window throw CancelException
     private int getCentralBodyTypeInput() throws CancelException {
-        String[] options = new String[] {"Giant Star", "White Dwarf", "Neutron Star", "Black Hole"};
+        String[] options = new String[]{"Giant Star", "White Dwarf", "Neutron Star", "Black Hole"};
         int response = JOptionPane.showOptionDialog(null, "Choose a central body",
                 "Central bodies", JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE,
                 null, options, options[0]);
@@ -255,17 +294,19 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
     }
 
 
+    // EFFECTS: creates a central body based on the central body type passed to it
+    //          can create a giant star, white dwarf, neutron star or black hole
     private CentralBody makeCentralBody(int centralBodyType) throws CancelException {
         CentralBody centralBody = null;
         switch (centralBodyType) {
             case 0:
-                centralBody =  makeGiantStar();
+                centralBody = makeGiantStar();
                 break;
             case 1:
-                centralBody =  makeWhiteDwarf();
+                centralBody = makeWhiteDwarf();
                 break;
             case 2:
-                centralBody =  makeNeutronStar();
+                centralBody = makeNeutronStar();
                 break;
             case 3:
                 centralBody = makeBlackHole();
@@ -275,6 +316,8 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
     }
 
 
+    // EFFECT: makes a black hole based on user inout for name and mass
+    //         if input windows are closed or canceled throw CancelException
     private BlackHole makeBlackHole() throws CancelException {
         String name;
         double mass = 0;
@@ -296,6 +339,9 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         return new BlackHole(name, mass);
     }
 
+
+    // EFFECT: makes a neutron star based on user inout for name and mass
+    //         if input windows are closed or canceled throw CancelException
     private NeutronStar makeNeutronStar() throws CancelException {
         String name;
         double mass = 0;
@@ -317,6 +363,9 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         return new NeutronStar(name, mass);
     }
 
+
+    // EFFECT: makes a white dwarf based on user inout for name and mass
+    //         if input windows are closed or canceled throw CancelException
     private WhiteDwarf makeWhiteDwarf() throws CancelException {
         String name;
         double mass = 0;
@@ -338,6 +387,9 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         return new WhiteDwarf(name, mass);
     }
 
+
+    // EFFECT: makes a giant star based on user inout for name and mass
+    //         if input windows are closed or canceled throw CancelException
     private GiantStar makeGiantStar() throws CancelException {
         String name;
         double luminosity = 0;
@@ -360,6 +412,9 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
     }
 
 
+    // EFFECT: open a new frame which displays the solar system's data
+    //         in the form of a tree
+    //         data includes central body and planets
     private void displaySolarSystemData(SolarSystem solarSystem) {
         JFrame solarSystemDataFrame = new JFrame("Solar System Data");
         CentralBody centralBody = solarSystem.getCentralBody();
@@ -381,46 +436,56 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         solarSystemDataFrame.add(scrollPane);
         solarSystemDataFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         solarSystemDataFrame.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT / 2));
-        solarSystemDataFrame.setMinimumSize(new Dimension(300,200));
+        solarSystemDataFrame.setMinimumSize(new Dimension(300, 200));
         solarSystemDataFrame.pack();
         solarSystemDataFrame.setVisible(true);
     }
 
-    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
+    // EFFECT: creates a node for a tree containing all the planets that are passed to it
     private DefaultMutableTreeNode makePlanetsNode(ArrayList<Planet> planets, int planetCount) {
         DefaultMutableTreeNode planetsNode = new DefaultMutableTreeNode("Planets: ("
                 + planetCount + " planets)");
 
         for (Planet p : planets) {
-            DefaultMutableTreeNode planetNode = new DefaultMutableTreeNode(p.getName());
-            DefaultMutableTreeNode planetTypeNode;
-            DefaultMutableTreeNode planetMoonNode;
-            if (p.isRocky()) {
-                planetTypeNode = new DefaultMutableTreeNode("Type: Rocky Planet");
-            } else {
-                planetTypeNode = new DefaultMutableTreeNode("Type: Gas Giant");
-            }
-            DefaultMutableTreeNode planetMassNode = new DefaultMutableTreeNode("Mass: "
-                    + String.format("%.2f", p.getMass()) + " Earth masses");
-            DefaultMutableTreeNode planetRadiusNode = new DefaultMutableTreeNode("Radius: "
-                    + String.format("%.2f", p.getRadius()) + " Earth radii");
-            DefaultMutableTreeNode planetOrbitNode = new DefaultMutableTreeNode("Orbit size: "
-                    + String.format("%.2f", p.getOrbitSize()) + " Earth orbit radii");
-            if (p.isMoon()) {
-                planetMoonNode = new DefaultMutableTreeNode("Has a moon");
-            } else {
-                planetMoonNode = new DefaultMutableTreeNode("No moons");
-            }
-            planetNode.add(planetTypeNode);
-            planetNode.add(planetMassNode);
-            planetNode.add(planetRadiusNode);
-            planetNode.add(planetOrbitNode);
-            planetNode.add(planetMoonNode);
-            planetsNode.add(planetNode);
+            makePlanetNode(p, planetsNode);
         }
         return planetsNode;
     }
 
+    // EFFECT: creates a node for a planet with all the planet's data
+    //         (type, mass, radius, orbit, if it has a moon)
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
+    private void makePlanetNode(Planet p, DefaultMutableTreeNode planetsNode) {
+        DefaultMutableTreeNode planetNode = new DefaultMutableTreeNode(p.getName());
+        DefaultMutableTreeNode planetTypeNode;
+        DefaultMutableTreeNode planetMoonNode;
+        if (p.isRocky()) {
+            planetTypeNode = new DefaultMutableTreeNode("Type: Rocky Planet");
+        } else {
+            planetTypeNode = new DefaultMutableTreeNode("Type: Gas Giant");
+        }
+        DefaultMutableTreeNode planetMassNode = new DefaultMutableTreeNode("Mass: "
+                + String.format("%.2f", p.getMass()) + " Earth masses");
+        DefaultMutableTreeNode planetRadiusNode = new DefaultMutableTreeNode("Radius: "
+                + String.format("%.2f", p.getRadius()) + " Earth radii");
+        DefaultMutableTreeNode planetOrbitNode = new DefaultMutableTreeNode("Orbit size: "
+                + String.format("%.2f", p.getOrbitSize()) + " Earth orbit radii");
+        if (p.isMoon()) {
+            planetMoonNode = new DefaultMutableTreeNode("Has a moon");
+        } else {
+            planetMoonNode = new DefaultMutableTreeNode("No moons");
+        }
+        planetNode.add(planetTypeNode);
+        planetNode.add(planetMassNode);
+        planetNode.add(planetRadiusNode);
+        planetNode.add(planetOrbitNode);
+        planetNode.add(planetMoonNode);
+        planetsNode.add(planetNode);
+    }
+
+
+    // EFFECT: creates a node for a central body with all the central body's data
+    //         ( mass, radius, luminosity)
     private DefaultMutableTreeNode makeCentralBodyNode(CentralBody centralBody) {
         DefaultMutableTreeNode centralBodyNode = new DefaultMutableTreeNode("Central Body: "
                 + centralBody.getName() + " - " + centralBody.getCentralBodyType());
@@ -447,12 +512,12 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
-
     }
 
+    // EFFECT: displays a solar system's data if it is selected from the menu
     @Override
     public void actionPerformed(ActionEvent e) {
-        JMenuItem source = (JMenuItem)(e.getSource());
+        JMenuItem source = (JMenuItem) (e.getSource());
         SolarSystem solarSystem = galaxy.getSolarSystem(source.getText());
         displaySolarSystemData(solarSystem);
     }
@@ -468,14 +533,17 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
             super("New Solar System");
         }
 
+        // EFFECT: builds a new solar system based on the user input
+        //         prompts creation of a central body
+        @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
         @Override
         public void actionPerformed(ActionEvent evt) {
-            String name;
+            String name = null;
             CentralBody centralBody;
             boolean keepGoing = true;
             try {
                 int centralBodyType = getCentralBodyTypeInput();
-                centralBody =  makeCentralBody(centralBodyType);
+                centralBody = makeCentralBody(centralBodyType);
             } catch (CancelException c) {
                 return;
             }
@@ -493,9 +561,9 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
             }
             updateSolarSystems();
             updateButtons((JComponent) splitPane.getBottomComponent());
+            JOptionPane.showMessageDialog(null, "Successfully added new solar system: " + name);
         }
     }
-
 
 
     /**
@@ -510,15 +578,14 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-            //TODO: Implement if you have free time
+            //TODO: Implement if I have free time
         }
     }
 
 
-
     /**
-     * Represents action to be taken when user wants to add a new solar
-     * system to the galaxy.
+     * Represents action to be taken when user wants to
+     * change the galaxy's name.
      */
     private class ChangeGalaxyNameAction extends AbstractAction {
 
@@ -526,6 +593,10 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
             super("Change galaxy name");
         }
 
+        // MODIFIES: this
+        // EFFECT: prompts the user to enter a new name for the galaxy
+        //         IF: something is entered, name is changed
+        //         ELSE: nothing happens
         @Override
         public void actionPerformed(ActionEvent evt) {
             String newName;
@@ -536,14 +607,15 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
             if (newName != null) {
                 galaxy = new Galaxy(newName);
                 updateNameLabel((JComponent) splitPaneTop.getRightComponent());
+                JOptionPane.showMessageDialog(null, "Changed galaxy name to " + newName);
             }
         }
     }
 
 
     /**
-     * Represents action to be taken when user wants to add a new solar
-     * system to the galaxy.
+     * Represents action to be taken when user wants to
+     * save their galaxy
      */
     private class SaveAction extends AbstractAction {
 
@@ -551,6 +623,8 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
             super("Save");
         }
 
+        // EFFECT: save the current galaxy and all of its contents to JSON_STORE
+        //         if file cannot be found, fails to save data
         @Override
         public void actionPerformed(ActionEvent evt) {
             try {
@@ -575,6 +649,9 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
             super("Load");
         }
 
+
+        // EFFECT: Loads a saved galaxy from JSON store
+        //         if file location cannot be found, fails to load data
         @Override
         public void actionPerformed(ActionEvent evt) {
             try {
@@ -582,8 +659,6 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
                 JOptionPane.showMessageDialog(null, "Loaded " + galaxy.getName() + " from " + JSON_STORE);
             } catch (IOException e) {
                 JOptionPane.showMessageDialog(null, "Unable to read from file: " + JSON_STORE);
-
-                System.out.println("Unable to read from file: " + JSON_STORE);
             }
             updateButtons((JComponent) splitPane.getBottomComponent());
             updateNameLabel((JComponent) splitPaneTop.getRightComponent());
