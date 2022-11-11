@@ -8,8 +8,7 @@ import model.*;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import javax.accessibility.AccessibleContext;
-import javax.security.auth.DestroyFailedException;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -17,16 +16,14 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 
-import static java.lang.Double.NaN;
+import static java.lang.Double.min;
 import static java.lang.Double.parseDouble;
 
-
+// Galaxy Builder GUI application
 public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, ActionListener {
     private static final String JSON_STORE = "./data/galaxy.json";
     private static final int WIDTH = 1000;
@@ -46,7 +43,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         // set up lists and readers/writers
         frame = new JFrame();
         initializeGalaxy();
-        Dimension minSize = new Dimension(150, 80);
+        Dimension minSize = new Dimension(200, 150);
 
         JScrollPane solarSystemPane = addSolarSystemsPane();
         JScrollPane imagePane = addImageToGUI();
@@ -66,6 +63,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         solarSystemPane.setMinimumSize(minSize);
         buttonsPane.setMinimumSize(minSize);
         imagePane.setMinimumSize(minSize);
+        frame.setMinimumSize(minSize);
         frame.add(splitPane);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setTitle("My Galaxy Builder");
@@ -142,23 +140,17 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         solarSystems.setSelectedIndex(0);
         solarSystems.addListSelectionListener(this);
 
-        JScrollPane solarSystemsScrollPane = new JScrollPane(solarSystems);
-
-        return solarSystemsScrollPane;
+        return new JScrollPane(solarSystems);
     }
 
     private void updateSolarSystems() {
         solarSystemsModel.clear();
         for (SolarSystem solarSystem : galaxy.getSolarSystems().values()) {
-            String solarSystemString = formatSolarSystem(solarSystem);
+            String solarSystemString = solarSystem.getName() + " -:- Central Body: "
+                    + solarSystem.getCentralBody().getCentralBodyType() + " -:- # of planets: "
+                    + solarSystem.getPlanetCount();
             solarSystemsModel.addElement(solarSystemString);
         }
-    }
-
-    private String formatSolarSystem(SolarSystem solarSystem) {
-        String result = solarSystem.getName() + " - Central Body: " + solarSystem.getCentralBody().getCentralBodyType()
-                + " - # of planets: " + solarSystem.getPlanetCount();
-        return result;
     }
 
     private JScrollPane addImageToGUI() {
@@ -174,8 +166,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         background.add(galaxyName);
         background.add(galaxyImage);
 
-        JScrollPane imagePane = new JScrollPane(background);
-        return imagePane;
+        return new JScrollPane(background);
     }
 
     // MODIFIES: splitPaneTop
@@ -250,6 +241,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         return doubleInput;
     }
 
+
     private int getCentralBodyTypeInput() throws CancelException {
         String[] options = new String[] {"Giant Star", "White Dwarf", "Neutron Star", "Black Hole"};
         int response = JOptionPane.showOptionDialog(null, "Choose a central body",
@@ -278,10 +270,10 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
             case 3:
                 centralBody = makeBlackHole();
                 break;
-
         }
         return centralBody;
     }
+
 
     private BlackHole makeBlackHole() throws CancelException {
         String name;
@@ -301,8 +293,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
                 JOptionPane.showMessageDialog(null, "Enter a mass over 2.5 please");
             }
         }
-        BlackHole blackHole = new BlackHole(name, mass);
-        return blackHole;
+        return new BlackHole(name, mass);
     }
 
     private NeutronStar makeNeutronStar() throws CancelException {
@@ -323,8 +314,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
                 JOptionPane.showMessageDialog(null, "Enter a mass between 1.4 and 2.5 please");
             }
         }
-        NeutronStar neutronStar = new NeutronStar(name, mass);
-        return neutronStar;
+        return new NeutronStar(name, mass);
     }
 
     private WhiteDwarf makeWhiteDwarf() throws CancelException {
@@ -345,8 +335,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
                 JOptionPane.showMessageDialog(null, "Enter a mass below 1.4");
             }
         }
-        WhiteDwarf whiteDwarf = new WhiteDwarf(name, mass);
-        return whiteDwarf;
+        return new WhiteDwarf(name, mass);
     }
 
     private GiantStar makeGiantStar() throws CancelException {
@@ -367,41 +356,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
                 JOptionPane.showMessageDialog(null, "n/a");
             }
         }
-        GiantStar giantStar = new GiantStar(name, luminosity);
-        return giantStar;
-    }
-
-    private JLabel addSolarSystemToPane(SolarSystem solarSystem) {
-        String data;
-        CentralBody centralBody = solarSystem.getCentralBody();
-        ArrayList<Planet> planets = new ArrayList<>(solarSystem.getPlanets().values());
-        data = "- - - -\n" + solarSystem.getName();
-        data = data + centralBodyData(centralBody);
-        //TODO: add planets data
-        JLabel dataLabel = new JLabel(data);
-
-        return dataLabel;
-    }
-
-    private String centralBodyData(CentralBody centralBody) {
-        String dataString;
-        String name = centralBody.getName();
-        String mass = String.format("%.2f", centralBody.getMass());
-        String radius = String.format("%.2f", centralBody.getRadius());
-        String centralBodyType = centralBody.getCentralBodyType();
-        dataString = "\n\t CENTRAL BODY:" + name + " - " + centralBodyType;
-        dataString += "\t\tMass: " + mass + " Solar masses";
-        if (centralBodyType.equals("Giant Star")) {
-            dataString += "\t\tRadius: " + radius + " Solar radii";
-            GiantStar giantStar = (GiantStar) centralBody;
-            String luminosity = String.format("%.2f", giantStar.getLuminosity());
-            dataString += "\t\tLuminosity: " + luminosity + " Solar luminosities";
-        } else if (centralBodyType.equals("Binary")) {
-            // not currently implemented
-        } else {
-            dataString += "\t\tRadius: " + radius + " kilometers";
-        }
-        return dataString;
+        return new GiantStar(name, luminosity);
     }
 
 
@@ -426,6 +381,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         solarSystemDataFrame.add(scrollPane);
         solarSystemDataFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         solarSystemDataFrame.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT / 2));
+        solarSystemDataFrame.setMinimumSize(new Dimension(300,200));
         solarSystemDataFrame.pack();
         solarSystemDataFrame.setVisible(true);
     }
@@ -554,25 +510,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-            //TODO
-        }
-    }
-
-    /**
-     * Represents action to be taken when user wants to add a new solar
-     * system to the galaxy.
-     */
-    private class SolarSystemDataAction extends AbstractAction {
-
-        SolarSystemDataAction() {
-
-            super("Display Solar Systems' data");
-        }
-
-        @Override
-        public void actionPerformed(ActionEvent evt) {
-
-
+            //TODO: Implement if you have free time
         }
     }
 
