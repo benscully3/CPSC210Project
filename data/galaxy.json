@@ -1,7 +1,24 @@
 {
     "solarSystems": [
         {
-            "planets": [],
+          "planets": [
+            {
+              "orbitSize": 3,
+              "moon": false,
+              "mass": 7,
+              "name": "planet2",
+              "radius": 4,
+              "rocky": true
+            },
+            {
+              "orbitSize": 4,
+              "moon": true,
+              "mass": 13,
+              "name": "planet1",
+              "radius": 10,
+              "rocky": false
+            }
+          ],
             "name": "jeez",
             "centralBody": {
                 "centralBodyType": "Black Hole",

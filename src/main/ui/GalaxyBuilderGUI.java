@@ -9,21 +9,25 @@ import persistence.JsonReader;
 import persistence.JsonWriter;
 
 import javax.accessibility.AccessibleContext;
+import javax.security.auth.DestroyFailedException;
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
+import javax.swing.tree.DefaultMutableTreeNode;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 import static java.lang.Double.NaN;
 import static java.lang.Double.parseDouble;
 
 
-public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
+public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, ActionListener {
     private static final String JSON_STORE = "./data/galaxy.json";
     private static final int WIDTH = 1000;
     private static final int HEIGHT = 600;
@@ -85,33 +89,48 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
         jsonReader = new JsonReader(JSON_STORE);
     }
 
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     private JScrollPane addButtonsPane() {
         boolean hasSolarSystems = galaxy.getSolarSystemCount() != 0;
 
         JPanel buttonPanel = new JPanel();
         buttonPanel.setLayout(new GridLayout(2,3));
-
         JButton addSolarSystemButton = new JButton(new AddSolarSystemAction());
         JButton editButton = new JButton(new EditSolarSystemsAction());
-        JButton displayButton = new JButton(new SolarSystemDataAction());
+        JMenuBar displayMenuBar = new JMenuBar();
         JButton changeNameButton = new JButton(new ChangeGalaxyNameAction());
         JButton saveButton = new JButton(new SaveAction());
         JButton loadButton = new JButton(new LoadAction());
 
+        JMenu menu = new JMenu("Solar System data");
+        displayMenuBar.add(menu);
+        buildMenu(menu);
+
         buttonPanel.add(addSolarSystemButton);
         buttonPanel.add(editButton);
-        buttonPanel.add(displayButton);
+        buttonPanel.add(displayMenuBar);
         buttonPanel.add(changeNameButton);
         buttonPanel.add(saveButton);
         buttonPanel.add(loadButton);
+
         if (hasSolarSystems) {
             editButton.setEnabled(true);
-            displayButton.setEnabled(true);
+            displayMenuBar.setEnabled(true);
         } else {
             editButton.setEnabled(false);
-            displayButton.setEnabled(false);
+            displayMenuBar.setEnabled(false);
         }
         return new JScrollPane(buttonPanel);
+    }
+
+    private void buildMenu(JMenu menu) {
+        JMenuItem menuItem;
+
+        for (SolarSystem s : galaxy.getSolarSystems().values()) {
+            menuItem = new JMenuItem(s.getName());
+            menuItem.addActionListener(this);
+            menu.add(menuItem);
+        }
     }
 
     private JScrollPane addSolarSystemsPane() {
@@ -293,7 +312,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
         name = getStringInput("Name your neutron star");
         while (keepGoing) {
             try {
-                mass = getPositiveDoubleInput("Choose the neutron star's mass. \n Mass must be between 1.4 and 1.5",
+                mass = getPositiveDoubleInput("Choose the neutron star's mass. \n Mass must be between 1.4 and 2.5",
                         1.4, 2.5);
                 keepGoing = false;
             } catch (NumberFormatException n) {
@@ -385,10 +404,103 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
         return dataString;
     }
 
+
+    private void displaySolarSystemData(SolarSystem solarSystem) {
+        JFrame solarSystemDataFrame = new JFrame("Solar System Data");
+        CentralBody centralBody = solarSystem.getCentralBody();
+        ArrayList<Planet> planets = new ArrayList<>(solarSystem.getPlanets().values());
+        int planetCount = solarSystem.getPlanetCount();
+
+        DefaultMutableTreeNode topNode = new DefaultMutableTreeNode("Solar System: "
+                + solarSystem.getName());
+
+        DefaultMutableTreeNode centralBodyNode = makeCentralBodyNode(centralBody);
+        DefaultMutableTreeNode planetsNode = makePlanetsNode(planets, planetCount);
+
+        topNode.add(centralBodyNode);
+        topNode.add(planetsNode);
+
+        JTree tree = new JTree(topNode);
+        JScrollPane scrollPane = new JScrollPane(tree);
+
+        solarSystemDataFrame.add(scrollPane);
+        solarSystemDataFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        solarSystemDataFrame.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT / 2));
+        solarSystemDataFrame.pack();
+        solarSystemDataFrame.setVisible(true);
+    }
+
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
+    private DefaultMutableTreeNode makePlanetsNode(ArrayList<Planet> planets, int planetCount) {
+        DefaultMutableTreeNode planetsNode = new DefaultMutableTreeNode("Planets: ("
+                + planetCount + " planets)");
+
+        for (Planet p : planets) {
+            DefaultMutableTreeNode planetNode = new DefaultMutableTreeNode(p.getName());
+            DefaultMutableTreeNode planetTypeNode;
+            DefaultMutableTreeNode planetMoonNode;
+            if (p.isRocky()) {
+                planetTypeNode = new DefaultMutableTreeNode("Type: Rocky Planet");
+            } else {
+                planetTypeNode = new DefaultMutableTreeNode("Type: Gas Giant");
+            }
+            DefaultMutableTreeNode planetMassNode = new DefaultMutableTreeNode("Mass: "
+                    + String.format("%.2f", p.getMass()) + " Earth masses");
+            DefaultMutableTreeNode planetRadiusNode = new DefaultMutableTreeNode("Radius: "
+                    + String.format("%.2f", p.getRadius()) + " Earth radii");
+            DefaultMutableTreeNode planetOrbitNode = new DefaultMutableTreeNode("Orbit size: "
+                    + String.format("%.2f", p.getOrbitSize()) + " Earth orbit radii");
+            if (p.isMoon()) {
+                planetMoonNode = new DefaultMutableTreeNode("Has a moon");
+            } else {
+                planetMoonNode = new DefaultMutableTreeNode("No moons");
+            }
+            planetNode.add(planetTypeNode);
+            planetNode.add(planetMassNode);
+            planetNode.add(planetRadiusNode);
+            planetNode.add(planetOrbitNode);
+            planetNode.add(planetMoonNode);
+            planetsNode.add(planetNode);
+        }
+        return planetsNode;
+    }
+
+    private DefaultMutableTreeNode makeCentralBodyNode(CentralBody centralBody) {
+        DefaultMutableTreeNode centralBodyNode = new DefaultMutableTreeNode("Central Body: "
+                + centralBody.getName() + " - " + centralBody.getCentralBodyType());
+        DefaultMutableTreeNode centralBodyMassNode = new DefaultMutableTreeNode("Mass: "
+                + String.format("%.2f", centralBody.getMass()) + " Solar masses");
+
+        centralBodyNode.add(centralBodyMassNode);
+
+        if (centralBody.getCentralBodyType().equals("Giant Star")) {
+            GiantStar giantStar = (GiantStar) centralBody;
+            DefaultMutableTreeNode giantStarRadiusNode = new DefaultMutableTreeNode("Radius: "
+                    + String.format("%.2f", centralBody.getRadius()) + " Solar Radii");
+            DefaultMutableTreeNode centralBodyLuminosityNode = new DefaultMutableTreeNode("Luminosity: "
+                    + String.format("%.2f", giantStar.getLuminosity()) + " Solar Luminosities");
+            centralBodyNode.add(giantStarRadiusNode);
+            centralBodyNode.add(centralBodyLuminosityNode);
+        } else {
+            DefaultMutableTreeNode centralBodyRadiusNode = new DefaultMutableTreeNode("Radius: "
+                    + String.format("%.2f", centralBody.getRadius()) + " km");
+            centralBodyNode.add(centralBodyRadiusNode);
+        }
+        return centralBodyNode;
+    }
+
     @Override
     public void valueChanged(ListSelectionEvent e) {
 
     }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        JMenuItem source = (JMenuItem)(e.getSource());
+        SolarSystem solarSystem = galaxy.getSolarSystem(source.getText());
+        displaySolarSystemData(solarSystem);
+    }
+
 
     /**
      * Represents action to be taken when user wants to add a new solar
@@ -453,30 +565,14 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener {
     private class SolarSystemDataAction extends AbstractAction {
 
         SolarSystemDataAction() {
+
             super("Display Solar Systems' data");
         }
 
         @Override
         public void actionPerformed(ActionEvent evt) {
-            JFrame solarSystemDataFrame = new JFrame("Solar System Data");
-            solarSystemDataFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            JLabel dataLabel = null;
-            JScrollPane scrollPane = new JScrollPane();
 
-            ArrayList<SolarSystem> solarSystems = new ArrayList<>(galaxy.getSolarSystems().values());
-            for (SolarSystem solarSystem : solarSystems) {
-                dataLabel = addSolarSystemToPane(solarSystem);
-                scrollPane.add(dataLabel);
-                //TODO: make it work
-            }
 
-            scrollPane.setMinimumSize(new Dimension(200,200));
-            scrollPane.setPreferredSize(new Dimension(WIDTH / 2, HEIGHT / 2));
-
-            solarSystemDataFrame.add(scrollPane, BorderLayout.CENTER);
-            solarSystemDataFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            solarSystemDataFrame.pack();
-            solarSystemDataFrame.setVisible(true);
         }
     }
 
