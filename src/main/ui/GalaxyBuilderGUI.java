@@ -136,6 +136,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
     }
 
 
+    // MODIFIES: menu
     // EFFECT: builds a menu of all the solar systems in the galaxy
     private void buildSolarSystemMenu(JMenu menu) {
         JMenuItem menuItem;
@@ -193,7 +194,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
     }
 
 
-    // MODIFIES: splitPaneTop
+    // MODIFIES: this
     // EFFECT: updates the galaxy name in the image by remaking the JPanel
 
     /**
@@ -253,7 +254,6 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
     //         IF: double is out of min/max bounds throw BadCommandException
     //         IF: the user closes or cancels the input window
     //             throw CancelException
-
     private double getPositiveDoubleInput(String s, double minValue, double maxValue)
             throws NumberFormatException, BadCommandException, NegativeNumberException, CancelException {
         String input;
@@ -509,6 +509,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         }
         return centralBodyNode;
     }
+
 
     @Override
     public void valueChanged(ListSelectionEvent e) {
