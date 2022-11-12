@@ -6,7 +6,7 @@
               "orbitSize": 3,
               "moon": false,
               "mass": 7,
-              "name": "planet2",
+              "name": "Earth",
               "radius": 4,
               "rocky": true
             },
@@ -14,31 +14,31 @@
               "orbitSize": 4,
               "moon": true,
               "mass": 13,
-              "name": "planet1",
+              "name": "Jupiter",
               "radius": 10,
               "rocky": false
             }
           ],
-            "name": "jeez",
+            "name": "BH system",
             "centralBody": {
                 "centralBodyType": "Black Hole",
                 "mass": 5,
-                "name": "idk",
+                "name": "Sagittarius A",
                 "radius": 14.75
             }
         },
         {
             "planets": [],
-            "name": "sheesh",
+            "name": "Solar System",
             "centralBody": {
                 "centralBodyType": "Giant Star",
                 "mass": 2.84953418898386,
-                "name": "big boy",
+                "name": "Vega",
                 "luminosity": 12,
                 "radius": 1.9198986566003808
             }
         }
     ],
     "solarSystemCount": 2,
-    "name": "andromeda"
+    "name": "Andromeda"
 }

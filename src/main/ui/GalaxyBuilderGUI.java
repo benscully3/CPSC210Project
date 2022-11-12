@@ -49,7 +49,8 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         // set up three panes in the window
         JScrollPane solarSystemPane = makeSolarSystemPane();
         JScrollPane imagePane = makeImagePane();
-        JScrollPane buttonsPane = addButtonsPane();
+        JPanel buttonsPane = addButtonsPane();
+        //JScrollPane buttonsPane = addButtonsPane();
 
         splitPaneTop = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT,
                 solarSystemPane, imagePane);
@@ -99,7 +100,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
     //         IF: there are solar systems present, all buttons are enabled
     //         ELSE: edit and display solar system buttons are not enabled
     @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
-    private JScrollPane addButtonsPane() {
+    private JPanel addButtonsPane() {
         boolean hasSolarSystems = galaxy.getSolarSystemCount() != 0;
 
         JPanel buttonPanel = new JPanel();
@@ -132,7 +133,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
             displayMenuBar.setVisible(false);
             displayMenuBar.setEnabled(false);
         }
-        return new JScrollPane(buttonPanel);
+        return buttonPanel;
     }
 
 
@@ -222,7 +223,8 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         int dividerLocation = parent.getDividerLocation();
         parent.remove(oldComponent);
 
-        JScrollPane newChild = addButtonsPane();
+        //JScrollPane newChild = addButtonsPane();
+        JPanel newChild = addButtonsPane();
 
         parent.add(newChild);
         parent.setDividerLocation(dividerLocation);

@@ -43,3 +43,17 @@ a solar system.
 - As a user, I want to be able to see my solar systems
 - As a user, I want to be able to save the galaxy I build
 - As a user, I want to be able to load the galaxy I have saved
+
+## Instructions For Grader
+*Important:* Do not save a galaxy until after first test  
+
+- Because there is no way to add planets in the GUI currently, the current save file (galaxy.json)
+has a galaxy with planets in it. Please load this file first with the 
+load button, and then look at the solar system data from the menu bar "Solar System data".
+This allows you to see how planets are displayed in this part of the GUI
+- It might make the most sense now to restart the program (to go from scratch), but it is not necessary
+- To add new solar systems you press "New Solar System" and follow the prompts
+The solar systems will appear in the top left panel
+- You can change the name of the galaxy with the "Change galaxy name button"
+- Once there is at least one solar system in the galaxy the "Edit Solar systems" (not yet implemented) and "Solar System data"
+menu bar become enabled. Use the menu bar to select for which solar system you want the data to be displayed.
