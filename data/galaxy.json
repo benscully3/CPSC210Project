@@ -1,41 +1,41 @@
 {
     "solarSystems": [
         {
-          "planets": [
-            {
-              "orbitSize": 3,
-              "moon": false,
-              "mass": 7,
-              "name": "Earth",
-              "radius": 4,
-              "rocky": true
-            },
-            {
-              "orbitSize": 4,
-              "moon": true,
-              "mass": 13,
-              "name": "Jupiter",
-              "radius": 10,
-              "rocky": false
-            }
-          ],
+            "planets": [],
             "name": "BH system",
             "centralBody": {
                 "centralBodyType": "Black Hole",
-                "mass": 5,
-                "name": "Sagittarius A",
-                "radius": 14.75
+                "mass": 100,
+                "name": "Saggetarius",
+                "radius": 295
             }
         },
         {
-            "planets": [],
+            "planets": [
+                {
+                    "orbitSize": 3,
+                    "moon": false,
+                    "mass": 7,
+                    "name": "planet2",
+                    "radius": 4,
+                    "rocky": true
+                },
+                {
+                    "orbitSize": 4,
+                    "moon": true,
+                    "mass": 13,
+                    "name": "planet1",
+                    "radius": 10,
+                    "rocky": false
+                }
+            ],
             "name": "Solar System",
             "centralBody": {
                 "centralBodyType": "Giant Star",
-                "mass": 2.84953418898386,
-                "name": "Vega",
-                "luminosity": 12,
-                "radius": 1.9198986566003808
+                "mass": 1.4,
+                "name": "Sun",
+                "luminosity": 1,
+                "radius": 0.5542270031025154
             }
         }
     ],

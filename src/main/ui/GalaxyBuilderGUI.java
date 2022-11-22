@@ -5,6 +5,7 @@ import exceptions.CancelException;
 import exceptions.NameAlreadyUsedException;
 import exceptions.NegativeNumberException;
 import model.*;
+import model.Event;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
@@ -21,6 +22,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+
 import static java.lang.Double.parseDouble;
 
 // Galaxy Builder GUI application
@@ -41,6 +44,11 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
 
     // MODIFIES: this
     // EFFECT: sets up and formats main GUI frame and buttons
+    /**
+     * Citation: addWindowListener to prompt eventLog to print to console
+     * code format taken from
+     */
+    @SuppressWarnings({"checkstyle:MethodLength", "checkstyle:SuppressWarnings"})
     public GalaxyBuilderGUI() {
         JFrame frame = new JFrame();
         init();
@@ -72,6 +80,26 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
         frame.setTitle("My Galaxy Builder");
         frame.pack();
         frame.setVisible(true);
+
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                printLog();
+                System.exit(0);
+            }
+        });
+    }
+
+    private void printLog() {
+        Iterator<Event> events = EventLog.getInstance().iterator();
+
+        events.forEachRemaining((event) -> printEvent(event));
+
+    }
+
+    private void printEvent(Event event) {
+        String eventString = event.toString();
+        System.out.println("\n" + eventString);
     }
 
 

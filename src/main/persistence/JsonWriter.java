@@ -1,5 +1,7 @@
 package persistence;
 
+import model.Event;
+import model.EventLog;
 import model.Galaxy;
 import org.json.JSONObject;
 
@@ -26,10 +28,12 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of workroom to file
+    // EFFECTS: writes JSON representation of galaxy to file
     public void write(Galaxy galaxy) {
         JSONObject json = galaxy.toJson();
         saveToFile(json.toString(TAB));
+
+        EventLog.getInstance().logEvent(new Event("Saved galaxy"));
     }
 
     // MODIFIES: this

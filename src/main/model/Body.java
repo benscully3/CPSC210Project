@@ -10,16 +10,16 @@ public abstract class Body {
     // EFFECT: change the body's name
     public void changeName(String newName) {
         this.name = newName;
+
+        EventLog.getInstance().logEvent(new Event("Changed body's name to " + name));
     }
 
     // getters
     public double getMass() {
-
         return mass;
     }
 
     public double getRadius() {
-
         return this.radius;
     }
 

@@ -18,6 +18,8 @@ public class Galaxy implements Writable {
         this.name = name;
         solarSystemCount = 0;
         solarSystems = new HashMap<>();
+
+        EventLog.getInstance().logEvent(new Event("Created Galaxy: " + name));
     }
 
     // MODIFIES: this
@@ -29,6 +31,8 @@ public class Galaxy implements Writable {
         if (solarSystems.get(solarSystemName) == null) {
             solarSystems.put(solarSystemName, solarSystem);
             solarSystemCount = solarSystemCount + 1;
+
+            EventLog.getInstance().logEvent(new Event("Added solar system to galaxy"));
         } else {
             throw new NameAlreadyUsedException();
         }
@@ -40,12 +44,14 @@ public class Galaxy implements Writable {
     public void removeSolarSystem(String solarSystemName) {
         solarSystems.remove(solarSystemName);
         solarSystemCount = solarSystemCount - 1;
+        EventLog.getInstance().logEvent(new Event("Removed solar system from galaxy"));
     }
 
     // MODIFIES: this
     // EFFECT: change the galaxies name
     public void changeName(String newName) {
         this.name = newName;
+        EventLog.getInstance().logEvent(new Event("Changed galaxy's name to " + name));
     }
 
     // EFFECT: return a solar system based on it's name
@@ -60,6 +66,9 @@ public class Galaxy implements Writable {
         json.put("name", name);
         json.put("solarSystemCount", solarSystemCount);
         json.put("solarSystems", solarSystemsToJson());
+
+        EventLog.getInstance().logEvent(new Event("Wrote galaxy to JSon"));
+
         return json;
     }
 
@@ -70,6 +79,8 @@ public class Galaxy implements Writable {
         for (SolarSystem s : solarSystems.values()) {
             jsonArray.put(s.toJson());
         }
+
+        EventLog.getInstance().logEvent(new Event("Wrote solar systems to JSon"));
 
         return jsonArray;
     }

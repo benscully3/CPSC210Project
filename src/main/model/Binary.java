@@ -13,6 +13,8 @@ public class Binary extends CentralBody {
         this.radius = centralBody1.getRadius() + centralBody2.getRadius();
         this.name = name;
         this.centralBodyType = "Binary";
+
+        EventLog.getInstance().logEvent(new Event("Created Binary System: " + name));
     }
 
     // EFFECT: Returns false because binaries cannot go supernova (in this program)

@@ -15,6 +15,8 @@ public class GiantStar extends Star {
                 / (4.0 * 3.14 * STEPHAN_BOLTZMANN * Math.pow(TEMPERATURE, 4)));
         this.name = name;
         this.centralBodyType = "Giant Star";
+
+        EventLog.getInstance().logEvent(new Event("Created Giant star: " + name));
     }
 
     // EFFECT: constructs giant star with all data given
@@ -25,6 +27,8 @@ public class GiantStar extends Star {
         this.name = name;
         this.centralBodyType = centralBodyType;
         this.luminosity = luminosity;
+
+        EventLog.getInstance().logEvent(new Event("Created Giant star: " + name));
     }
 
     // EFFECT: returns true because giant stars can go supernova

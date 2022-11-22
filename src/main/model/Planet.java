@@ -22,6 +22,8 @@ public class Planet extends Body implements Writable {
         this.orbitSize = 1;
         this.rocky = true;
         this.mass = calculateMass(this.rocky, 1);
+
+        EventLog.getInstance().logEvent(new Event("Created planet: " + name));
     }
 
     // REQUIRES: radius and orbitSize must be positive
@@ -40,6 +42,7 @@ public class Planet extends Body implements Writable {
             this.mass = calculateMass(false, this.radius);
         }
 
+        EventLog.getInstance().logEvent(new Event("Created planet: " + name));
     }
 
     // REQUIRES: radius and orbitSize must be positive
@@ -52,6 +55,8 @@ public class Planet extends Body implements Writable {
         this.orbitSize = orbitSize;
         this.moon = isMoon;
         this.rocky = isRocky;
+
+        EventLog.getInstance().logEvent(new Event("Created planet: " + name));
     }
 
 
@@ -78,6 +83,7 @@ public class Planet extends Body implements Writable {
         json.put("orbitSize", orbitSize);
         json.put("rocky", rocky);
         json.put("moon", moon);
+
 
         return json;
     }

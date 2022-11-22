@@ -10,6 +10,8 @@ public class BlackHole extends CentralBody {
         this.radius = 2.95 * mass;
         this.name = name;
         this.centralBodyType = "Black Hole";
+
+        EventLog.getInstance().logEvent(new Event("Created Black Hole: " + name));
     }
 
     // EFFECT: constructs black hole with all data given
@@ -19,6 +21,8 @@ public class BlackHole extends CentralBody {
         this.radius = radius;
         this.name = name;
         this.centralBodyType = centralBodyType;
+
+        EventLog.getInstance().logEvent(new Event("Created Black Hole: " + name));
     }
 
     // EFFECT: returns false because black holes cannot go supernova

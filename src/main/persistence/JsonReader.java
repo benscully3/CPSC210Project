@@ -25,7 +25,11 @@ public class JsonReader {
     public Galaxy read() throws IOException {
         String jsonData = readFile(source);
         JSONObject jsonObject = new JSONObject(jsonData);
-        return parseGalaxy(jsonObject);
+        Galaxy galaxy = parseGalaxy(jsonObject);
+
+        EventLog.getInstance().logEvent(new Event("Loaded galaxy"));
+
+        return galaxy;
     }
 
     // EFFECTS: reads source file as string and returns it
@@ -55,6 +59,7 @@ public class JsonReader {
             JSONObject nextSolarSystem = (JSONObject) json;
             addSolarSystem(galaxy, nextSolarSystem);
         }
+
     }
 
     // MODIFIES: galaxy
@@ -102,7 +107,6 @@ public class JsonReader {
             JSONObject nextPlanet = (JSONObject) json;
             addPlanet(solarSystem, nextPlanet);
         }
-
     }
 
     // MODIFIES: solarSystem

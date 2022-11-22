@@ -20,6 +20,8 @@ public class SolarSystem extends Body implements Writable {
         planets = new HashMap<>();
         planetCount = 0;
         this.name = name;
+
+        EventLog.getInstance().logEvent(new Event("Created solar system: " + name));
     }
 
     // MODIFIES: this
@@ -36,12 +38,18 @@ public class SolarSystem extends Body implements Writable {
                 planetName = newPlanet.getName();
                 planets.remove(p.getName());
                 planets.put(planetName, newPlanet);
+
+                EventLog.getInstance().logEvent(new Event("Added planet to solar system"));
+
                 return true;
             }
         }
         planetName = planet.getName();
         planets.put(planetName, planet);
         planetCount++;
+
+        EventLog.getInstance().logEvent(new Event("Added planet to solar system"));
+
         return false;
     }
 
@@ -52,6 +60,8 @@ public class SolarSystem extends Body implements Writable {
     public void removePlanet(String planetName) {
         planets.remove(planetName);
         planetCount--;
+
+        EventLog.getInstance().logEvent(new Event("Removed planet from solar system"));
     }
 
     // EFFECT: returns true if two planets would collide (have the same radius)
@@ -67,6 +77,8 @@ public class SolarSystem extends Body implements Writable {
     public void clearPlanets() {
         planets.clear();
         planetCount = 0;
+
+        EventLog.getInstance().logEvent(new Event("Cleared planets from solar system"));
     }
 
     // REQUIRES: planet must be in solar system
@@ -81,6 +93,7 @@ public class SolarSystem extends Body implements Writable {
         json.put("name", name);
         json.put("centralBody", centralBodyToJson());
         json.put("planets", planetsToJson());
+
         return json;
     }
 
@@ -104,6 +117,8 @@ public class SolarSystem extends Body implements Writable {
             GiantStar giantStar = (GiantStar) centralBody;
             json.put("luminosity", giantStar.getLuminosity());
         }
+
+
         return json;
     }
 
