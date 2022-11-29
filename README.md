@@ -74,4 +74,4 @@ Tue Nov 29 11:24:34 PST 2022
 Added solar system to galaxy
 
 Tue Nov 29 11:24:44 PST 2022     
-Created Galaxy: Andromeda
+Changed galaxy's name to andromeda

@@ -636,7 +636,7 @@ public class GalaxyBuilderGUI extends JFrame implements ListSelectionListener, A
                     "Rename galaxy",
                     JOptionPane.QUESTION_MESSAGE);
             if (newName != null) {
-                galaxy = new Galaxy(newName);
+                galaxy.changeName(newName);
                 updateNameLabel((JComponent) splitPaneTop.getRightComponent());
                 JOptionPane.showMessageDialog(null, "Changed galaxy name to " + newName);
             }
