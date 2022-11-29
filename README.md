@@ -58,21 +58,4 @@ The solar systems will appear in the top left panel
 - Once there is at least one solar system in the galaxy the "Edit Solar systems" (not yet implemented) and "Solar System data"
 menu bar become enabled. Use the menu bar to select for which solar system you want the data to be displayed.
 
-## Phase 4: Task 2
-*Example event log output*
-
-Tue Nov 29 11:24:15 PST 2022                                                                                    
-Created Galaxy: MilkyWay
-
-Tue Nov 29 11:24:27 PST 2022     
-Created Giant star: Sun
-
-Tue Nov 29 11:24:34 PST 2022     
-Created solar system: Home
-
-Tue Nov 29 11:24:34 PST 2022     
-Added solar system to galaxy
-
-Tue Nov 29 11:24:44 PST 2022     
-Created Galaxy: Andromeda
 
