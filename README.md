@@ -75,3 +75,17 @@ Added solar system to galaxy
 
 Tue Nov 29 11:24:44 PST 2022     
 Changed galaxy's name to andromeda
+
+## Phase 4: Task 3
+There are 3 ways I would refactor my project.       
+The first is that both the galaxy and solar system classes could be split up into two different classes,
+a Galaxy class and a SolarSystemManager class (a SolarSystem and PlanetManager class for
+the solar system class). This is because these two classes have more than one responsibility each. They have to store
+and manage the data about themselves but also must manage the lists of the elements they contain. The 
+details of these methods could be contained in a second class.     
+Another refactoring option would be to format the galaxy class according to the singleton pattern
+because there should only ever be one galaxy when the system is run.     
+Finally, in the UML diagram we note that the relationship between Binary is and CentralBody is somewhat
+circular. Though there is a REQUIRES clause in Binary that says a Binary cannot have a binary in it. However 
+I cannot think of a way to avoid the circular relationship, but it would be better to make the constructor of 
+the Binary throw an exception if an input CentralBody is a Binary.
