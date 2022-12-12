@@ -89,3 +89,6 @@ Finally, in the UML diagram we note that the relationship between Binary is and 
 circular. Though there is a REQUIRES clause in Binary that says a Binary cannot have a binary in it. However 
 I cannot think of a way to avoid the circular relationship, but it would be better to make the constructor of 
 the Binary throw an exception if an input CentralBody is a Binary.
+
+
+TEST
